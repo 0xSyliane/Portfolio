@@ -1,0 +1,12 @@
+node_modules
+dist
+.astro
+.vercel
+.env*
+!.env.example
+test-results
+playwright-report
+# Local-only: merchant names grepped for in dist (see scripts/.denylist.local.example)
+scripts/.denylist.local
+# Working files that must never be published
+*.local

@@ -1,0 +1,66 @@
+---
+/**
+ * STUB — owned by Dev C (home UI). Replace the markup, keep the contract:
+ * `home` is a `Home` (src/content/types.ts); nav anchors in src/content/site.ts
+ * expect these section ids: travaux, methode, a-propos, contact.
+ */
+import EmailLink from "../../components/EmailLink.astro";
+import type { Home } from "../../content/types.ts";
+import { rich } from "../../lib/rich.ts";
+
+interface Props {
+  home: Home;
+}
+
+const { home } = Astro.props;
+---
+
+<div class="wrap page-main">
+  <section aria-labelledby="hero-title">
+    <h1 id="hero-title">{home.hero.name}</h1>
+    <p set:html={rich(home.hero.role)} />
+    <p set:html={rich(home.hero.lede)} />
+    <p>
+      <a href={home.hero.ctaPrimary.href}>{home.hero.ctaPrimary.label}</a>
+      <a href={home.hero.ctaSecondary.href}>{home.hero.ctaSecondary.label}</a>
+    </p>
+  </section>
+
+  <section id="prestations" aria-labelledby="services-title">
+    <h2 id="services-title" set:html={rich(home.services.heading)} />
+    <ul role="list">
+      {home.services.items.map((s) => <li set:html={rich(`${s.ref} — ${s.title}`)} />)}
+    </ul>
+  </section>
+
+  <section id="travaux" aria-labelledby="work-title">
+    <h2 id="work-title" set:html={rich(home.work.heading)} />
+    <ul role="list">
+      {home.work.cases.map((c) => <li set:html={rich(c.title)} />)}
+    </ul>
+  </section>
+
+  <section id="methode" aria-labelledby="method-title">
+    <h2 id="method-title" set:html={rich(home.method.heading)} />
+    <ol>
+      {home.method.steps.map((s) => <li set:html={rich(s.title)} />)}
+    </ol>
+  </section>
+
+  <section id="a-propos" aria-labelledby="about-title">
+    <h2 id="about-title" set:html={rich(home.about.heading)} />
+    {home.about.paragraphs.map((p) => <p set:html={rich(p)} />)}
+  </section>
+
+  <section id="contact" aria-labelledby="contact-title">
+    <h2 id="contact-title" set:html={rich(home.contact.heading)} />
+    <p>
+      <EmailLink
+        email={home.contact.email}
+        label={home.contact.emailLabel}
+        noScript={home.contact.emailNoScript}
+      />
+    </p>
+    <p><a href={home.contact.linkedin.href} rel="noopener noreferrer">{home.contact.linkedin.label}</a></p>
+  </section>
+</div>

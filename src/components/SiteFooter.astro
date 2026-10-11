@@ -1,0 +1,18 @@
+---
+import { CHROME } from "../content/site.ts";
+import type { Locale } from "../lib/i18n.ts";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { footer } = CHROME[locale];
+---
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <p class="mono">{footer.rights}</p>
+    <a class="mono" href={footer.legal.href} hreflang="fr">{footer.legal.label}</a>
+  </div>
+</footer>

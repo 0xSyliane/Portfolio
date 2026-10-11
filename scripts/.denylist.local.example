@@ -1,0 +1,5 @@
+# One term per line (case-insensitive). Copy to scripts/.denylist.local (gitignored)
+# and list merchant names, Instagram handles and preview slugs that must NEVER
+# appear anywhere in dist/. Lines starting with # are ignored.
+# example-merchant-name
+# @example_handle

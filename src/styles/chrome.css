@@ -1,0 +1,73 @@
+/* Header, footer and page frame. OWNER: platform. */
+.site-header {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: var(--z-header);
+  background: var(--paper);
+  border-block-end: 1px solid var(--hair);
+}
+
+.site-header__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-5);
+  padding-block: var(--space-3);
+}
+
+.site-header__brand {
+  font-weight: 800;
+  font-size: 1.125rem;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-decoration: none;
+  margin-inline-end: auto;
+}
+
+.site-header__nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-5);
+  padding: 0;
+}
+
+.site-header__nav a,
+.site-header__switch,
+.site-footer a {
+  color: var(--ink);
+  text-decoration: none;
+  padding-block: var(--space-2);
+  display: inline-block;
+  min-block-size: 24px;
+}
+
+.site-header__nav a:hover,
+.site-header__switch:hover,
+.site-footer a:hover {
+  color: var(--link);
+  text-decoration: underline;
+}
+
+.site-header__switch {
+  border: var(--border);
+  padding-inline: var(--space-3);
+  border-radius: var(--radius);
+}
+
+.site-footer {
+  margin-block-start: var(--space-9);
+  border-block-start: 1px solid var(--rule);
+  padding-block: var(--space-6);
+  color: var(--ink-2);
+}
+
+.site-footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.page-main {
+  padding-block: var(--space-8);
+}

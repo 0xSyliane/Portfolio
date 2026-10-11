@@ -1,0 +1,33 @@
+---
+/**
+ * Obfuscated e-mail link. The address is NOT in the HTML: the parts live in
+ * data attributes and src/scripts/contact.ts assembles the mailto on load.
+ * Without JS it renders as inert text (`noScript`).
+ */
+import type { EmailParts } from "../content/types.ts";
+
+interface Props {
+  email: Pick<EmailParts, "local" | "domain"> & { subject?: string };
+  /** Visible label once the link is live, e.g. "Écrire un e-mail". */
+  label: string;
+  /** Text shown until/unless JS runs. */
+  noScript: string;
+  class?: string;
+}
+
+const { email, label, noScript, class: className } = Astro.props;
+---
+
+<a
+  class:list={["email-link", className]}
+  href="#contact"
+  aria-disabled="true"
+  data-mail
+  data-mail-user={email.local}
+  data-mail-domain={email.domain}
+  data-mail-subject={email.subject}
+  data-mail-label={label}>{noScript}</a
+>
+<script>
+  import "../scripts/contact.ts";
+</script>

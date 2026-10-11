@@ -1,0 +1,47 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { rich } from "../../../lib/rich.ts";
+
+/** Legal notice (LCEN-style). Owner: platform; the facts are placeholders until confirmed. */
+const sections = [
+  {
+    id: "editeur",
+    title: "Éditeur du site",
+    body: "Syliane Saadbouzid, [[statut juridique]], [[ville, pays]].\nContact : voir la section Contact de la [page d'accueil](/fr/#contact).\nDirecteur de la publication : Syliane Saadbouzid.",
+  },
+  {
+    id: "hebergeur",
+    title: "Hébergeur",
+    body: "Vercel Inc., [[adresse de l'hébergeur à vérifier]]. Site : [vercel.com](https://vercel.com).",
+  },
+  {
+    id: "donnees",
+    title: "Données personnelles",
+    body: "Ce site n'utilise ni cookie, ni outil de mesure d'audience, ni formulaire. Aucune donnée personnelle n'est collectée par le site. Si vous m'écrivez par e-mail, votre message n'est utilisé que pour vous répondre.",
+  },
+  {
+    id: "propriete",
+    title: "Propriété intellectuelle",
+    body: "Textes, code et visuels du site : © Syliane Saadbouzid, [[licence ou « tous droits réservés »]]. Les marques citées appartiennent à leurs propriétaires.",
+  },
+] as const;
+---
+
+<BaseLayout
+  locale="fr"
+  page="legal"
+  title="Mentions légales"
+  description="Mentions légales du site de Syliane Saadbouzid : éditeur, hébergeur, données personnelles et propriété intellectuelle."
+>
+  <div class="wrap page-main">
+    <h1>Mentions légales</h1>
+    {
+      sections.map((s) => (
+        <section aria-labelledby={`legal-${s.id}`}>
+          <h2 id={`legal-${s.id}`}>{s.title}</h2>
+          <p set:html={rich(s.body)} />
+        </section>
+      ))
+    }
+  </div>
+</BaseLayout>

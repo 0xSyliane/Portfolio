@@ -1,0 +1,40 @@
+---
+import { CHROME, SITE_NAME } from "../content/site.ts";
+import { switchTarget, type Locale, type PageId } from "../lib/i18n.ts";
+
+interface Props {
+  locale: Locale;
+  page?: PageId;
+}
+
+const { locale, page } = Astro.props;
+const chrome = CHROME[locale];
+const target = page ? switchTarget(page, locale) : undefined;
+const homeHref = "/fr/";
+---
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="site-header__brand" href={homeHref} aria-label={chrome.brandAriaLabel}>{SITE_NAME}</a>
+    <nav class="site-header__nav" aria-label={chrome.navLabel}>
+      <ul role="list">
+        {
+          chrome.nav.map((item) => (
+            <li>
+              <a href={item.href} hreflang={locale === "en" && item.href.startsWith("/fr/") ? "fr" : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    {
+      target && (
+        <a class="site-header__switch mono" href={target.path} hreflang={target.locale} lang={target.locale}>
+          {chrome.switchLabel}
+        </a>
+      )
+    }
+  </div>
+</header>

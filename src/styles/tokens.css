@@ -1,0 +1,68 @@
+/*
+ * Design tokens (LIGHT only in V1: no dark mode, no theme script).
+ * Source: webteam-projects/portfolio/20-concept-art.md §2–3.
+ * Every colour, size and duration used elsewhere comes from here.
+ * OWNER: platform.
+ */
+:root {
+  color-scheme: light;
+
+  /* Colour */
+  --paper: oklch(0.975 0.006 105);
+  --sheet: oklch(0.945 0.014 240);
+  --ink: oklch(0.22 0.03 255);
+  --ink-2: oklch(0.43 0.03 255);
+  --rule: oklch(0.56 0.03 255); /* borders only (>= 3:1) */
+  --hair: oklch(0.86 0.012 255); /* decorative only */
+  --stamp: oklch(0.5 0.18 30);
+  --link: oklch(0.44 0.15 258);
+  --ok: oklch(0.45 0.11 155);
+  --wait: oklch(0.47 0.1 75);
+  --concept: oklch(0.46 0.07 250);
+  --focus: var(--link);
+
+  /* Typography */
+  --font-display: "Bricolage Grotesque Variable", "Bricolage Fallback", system-ui, sans-serif;
+  --font-body: var(--font-display);
+  --font-mono: "IBM Plex Mono", "Plex Fallback", ui-monospace, monospace;
+
+  --step-hero: clamp(3.25rem, 1.5rem + 8.5vw, 9.5rem);
+  --step-h2: clamp(2.5rem, 1.6rem + 4.3vw, 5rem);
+  --step-h3: clamp(1.375rem, 1.1rem + 1vw, 2rem);
+  --step-body: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+  --step-small: 0.875rem;
+  --step-mono: 0.8125rem;
+
+  --leading-tight: 1.02;
+  --leading-body: 1.55;
+  --measure: 60ch;
+
+  /* Spacing (4px base, fluid at the large end) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: clamp(3rem, 2rem + 4vw, 6rem);
+  --space-9: clamp(4rem, 2.5rem + 7vw, 9rem);
+
+  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+  --page-max: 90rem;
+
+  /* Shape */
+  --radius: 2px;
+  --border: 1px solid var(--rule);
+
+  /* Motion (transform / opacity / clip-path only) */
+  --dur-fast: 120ms;
+  --dur-base: 180ms;
+  --dur-slow: 320ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Layers */
+  --z-header: 10;
+  --z-skip: 100;
+}

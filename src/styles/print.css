@@ -1,0 +1,33 @@
+/*
+ * Print / PDF skeleton. OWNER of the CV print layout: content (Dev B).
+ * Platform only guarantees: ink on white, no chrome, visible link targets.
+ */
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  :root {
+    --paper: #fff;
+    --sheet: #fff;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+    font-size: 10pt;
+  }
+
+  .site-header,
+  .site-footer,
+  .skip-link,
+  .no-print {
+    display: none !important;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}

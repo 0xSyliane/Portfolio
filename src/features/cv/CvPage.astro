@@ -1,0 +1,56 @@
+---
+/**
+ * STUB — owned by Dev B (content + CV). Replace the markup, keep the contract:
+ * the page wrappers pass `facts` (language-independent) + `copy` (this locale).
+ * DOM order = reading order: profile, projects, education, skills, languages, links.
+ */
+import EmailLink from "../../components/EmailLink.astro";
+import { formatIsoDate, type Locale } from "../../lib/i18n.ts";
+import { rich } from "../../lib/rich.ts";
+import type { CvCopy, CvFacts } from "../../content/types.ts";
+
+interface Props {
+  locale: Locale;
+  facts: CvFacts;
+  copy: CvCopy;
+}
+
+const { locale, facts, copy } = Astro.props;
+---
+
+<div class="wrap page-main">
+  <h1>{facts.profile.name}</h1>
+  <p set:html={rich(copy.headline)} />
+
+  <section aria-labelledby="cv-profile">
+    <h2 id="cv-profile">{copy.headings.profile}</h2>
+    <p set:html={rich(copy.summary)} />
+    <p><a href={copy.downloadPdf.href}>{copy.downloadPdf.label}</a></p>
+  </section>
+
+  <section aria-labelledby="cv-projects">
+    <h2 id="cv-projects">{copy.headings.projects}</h2>
+    <ul role="list">
+      {
+        facts.entries.map((entry) => {
+          const text = copy.entries.find((e) => e.id === entry.id);
+          return (
+            <li>
+              <h3 set:html={rich(`${text?.role ?? ""} — ${entry.org}`)} />
+              <p class="mono">
+                {formatIsoDate(entry.start, locale)} – {entry.end ? formatIsoDate(entry.end, locale) : copy.present}
+              </p>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </section>
+
+  <section aria-labelledby="cv-contact">
+    <h2 id="cv-contact">{copy.headings.links}</h2>
+    <p>
+      <EmailLink email={facts.email} label="E-mail" noScript="E-mail (JavaScript)" />
+    </p>
+  </section>
+</div>
