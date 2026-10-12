@@ -3,7 +3,7 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 import CvPage from "../../../features/cv/CvPage.astro";
 import { cvFacts } from "../../../content/cv/facts.ts";
 import { cvEn as copy } from "../../../content/cv/en.ts";
-import { personLd } from "../../../lib/jsonld.ts";
+import { knowsAboutFrom, personLd } from "../../../lib/jsonld.ts";
 ---
 
 <BaseLayout
@@ -11,7 +11,7 @@ import { personLd } from "../../../lib/jsonld.ts";
   page="cv"
   title={copy.meta.title}
   description={copy.meta.description}
-  jsonLd={[personLd({ jobTitle: copy.headline, city: cvFacts.profile.city })]}
+  jsonLd={[personLd({ jobTitle: copy.headline, city: cvFacts.profile.city, knowsAbout: knowsAboutFrom(cvFacts) })]}
 >
   <CvPage locale="en" facts={cvFacts} copy={copy} />
 </BaseLayout>

@@ -1,0 +1,60 @@
+---
+import type { CaseStudy, Home } from "../../content/types.ts";
+import { rich } from "../../lib/rich.ts";
+import Arrow from "./Arrow.astro";
+import Stamp from "./Stamp.astro";
+import { labelsFor } from "./labels.ts";
+import "./hero.css";
+
+interface Props {
+  hero: Home["hero"];
+  /** Cases listed in the "bon" stack, each linking to its sheet in Travaux. */
+  cases: readonly CaseStudy[];
+  workHeading: string;
+}
+
+const { hero, cases, workHeading } = Astro.props;
+const HOME_LABELS = labelsFor(Astro.url.pathname);
+const tilts = ["a", "b", "c"] as const;
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="wrap hero__grid">
+    <div class="hero__main">
+      <p class="hero__eyebrow mono">{hero.eyebrow}</p>
+      <h1 id="hero-title" class="hero__title">
+        <span class="hero__name">{hero.name}</span>
+        {" "}
+        <span class="hero__role">{hero.role}</span>
+      </h1>
+      <p class="hero__lede" set:html={rich(hero.lede)} />
+      <div class="hero__actions">
+        <a class="btn" href={hero.ctaPrimary.href} aria-label={hero.ctaPrimary.ariaLabel}>
+          {hero.ctaPrimary.label}
+          <Arrow dir="down" class="btn__icon" />
+        </a>
+        <a class="link-quiet" href={hero.ctaSecondary.href} aria-label={hero.ctaSecondary.ariaLabel}>
+          {hero.ctaSecondary.label}
+        </a>
+      </div>
+      {hero.availability && <p class="hero__availability mono" set:html={rich(hero.availability)} />}
+    </div>
+
+    <aside class="hero__bon" aria-labelledby="hero-bon-title">
+      <p id="hero-bon-title" class="hero__bon-head mono">{workHeading}</p>
+      <ol role="list" class="hero__bon-list">
+        {
+          cases.map((c, i) => (
+            <li>
+              <a class="hero__bon-row" href={`#case-${c.slug}`}>
+                <span class="hero__bon-no mono">{HOME_LABELS.number}&nbsp;{String(i + 1).padStart(2, "0")}</span>
+                <span class="hero__bon-title">{c.title}</span>
+                <Stamp label={c.stampLabel} status={c.status} tilt={tilts[i % 3]} />
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </aside>
+  </div>
+</section>

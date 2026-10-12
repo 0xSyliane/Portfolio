@@ -1,0 +1,36 @@
+---
+/** A captured screenshot rendered as a paper "sheet" (AVIF/WebP, explicit size, lazy unless `eager`). */
+import { Picture } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+interface Props {
+  image: ImageMetadata;
+  alt: string;
+  kind: "desktop" | "phone";
+  caption?: string;
+  /** Load immediately (lead case): a lazy image can stay an empty frame, e.g. in a JS-off full-page capture. */
+  eager?: boolean;
+  class?: string;
+}
+
+const { image, alt, kind, caption, eager = false, class: className } = Astro.props;
+const widths = kind === "desktop" ? [640, 960, 1440, 1920] : [320, 480, 640];
+const sizes =
+  kind === "desktop"
+    ? "(min-width: 64rem) 58vw, calc(100vw - 2rem)"
+    : "(min-width: 64rem) 12rem, 7.5rem";
+---
+
+<figure class:list={["shot", `shot--${kind}`, className]}>
+  <Picture
+    src={image}
+    alt={alt}
+    widths={widths}
+    sizes={sizes}
+    formats={["avif", "webp"]}
+    loading={eager ? "eager" : "lazy"}
+    decoding="async"
+    class="shot__img"
+  />
+  {caption && <figcaption class="shot__caption mono">{caption}</figcaption>}
+</figure>

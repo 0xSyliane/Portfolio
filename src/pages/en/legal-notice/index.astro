@@ -1,0 +1,47 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { rich } from "../../../lib/rich.ts";
+
+/** Legal notice (EN). Same facts as the French « Mentions légales », which is the reference text. */
+const sections = [
+  {
+    id: "publisher",
+    title: "Site publisher",
+    body: "Legal name: Syliane Sofiane Saad Bouzid.\nTrading name: Syliane Saadbouzid, self-employed (auto-entrepreneur), Algiers (Algeria).\nContact: see the Contact section of the [home page](/en/#contact).\nPublication director: Syliane Saadbouzid.",
+  },
+  {
+    id: "host",
+    title: "Host",
+    body: "Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, United States. Website: [vercel.com](https://vercel.com).",
+  },
+  {
+    id: "data",
+    title: "Personal data",
+    body: "This site uses no cookies, no analytics and no form, and it collects no personal data. As with any website, the host may keep technical connection logs (IP address, date, requested page). If you e-mail me, your message is used only to reply to you.",
+  },
+  {
+    id: "rights",
+    title: "Intellectual property",
+    body: "Texts, code and visuals of this site: © Syliane Saadbouzid, all rights reserved. Trademarks mentioned belong to their owners.",
+  },
+] as const;
+---
+
+<BaseLayout
+  locale="en"
+  page="legal"
+  title="Legal notice"
+  description="Legal notice of the Syliane Saadbouzid website: publisher, host, personal data and intellectual property."
+>
+  <div class="wrap page-main">
+    <h1>Legal notice</h1>
+    {
+      sections.map((s) => (
+        <section aria-labelledby={`legal-${s.id}`}>
+          <h2 id={`legal-${s.id}`}>{s.title}</h2>
+          <p set:html={rich(s.body)} />
+        </section>
+      ))
+    }
+  </div>
+</BaseLayout>

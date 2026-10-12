@@ -1,0 +1,20 @@
+---
+import { rich } from "../../lib/rich.ts";
+import { labelsFor } from "./labels.ts";
+
+interface Props {
+  /** Ledger number, e.g. "02". */
+  no: string;
+  id: string;
+  heading: string;
+  intro?: string;
+}
+
+const { no, id, heading, intro } = Astro.props;
+---
+
+<header class="sec-head">
+  <p class="sec-head__no mono">{labelsFor(Astro.url.pathname).section}&nbsp;{no}</p>
+  <h2 id={id} set:html={rich(heading)} />
+  {intro && <p class="sec-head__intro" set:html={rich(intro)} />}
+</header>

@@ -1,0 +1,100 @@
+---
+import type { CaseStudy } from "../../content/types.ts";
+import { rich } from "../../lib/rich.ts";
+import Arrow from "./Arrow.astro";
+import Composition from "./Composition.astro";
+import Shot from "./Shot.astro";
+import Stamp from "./Stamp.astro";
+import { captureDate, findShot, hostOf } from "./assets.ts";
+import { labelsFor, localeFor } from "./labels.ts";
+
+interface Props {
+  study: CaseStudy;
+  /** 0-based position: 0 is the lead case; odd/even alternate the sides. */
+  index: number;
+}
+
+const { study, index } = Astro.props;
+const locale = localeFor(Astro.url.pathname);
+const HOME_LABELS = labelsFor(Astro.url.pathname);
+const W = HOME_LABELS.work;
+const no = String(index + 1).padStart(2, "0");
+const desktop = findShot(study.slug, "desktop");
+const phone = findShot(study.slug, "phone");
+const host = hostOf(study.links.live);
+const date = captureDate(study.slug, locale);
+const caption = [`${HOME_LABELS.number} ${no}`, host, date && `${W.captured} ${date}`]
+  .filter(Boolean)
+  .join(" · ");
+const tilt = (["a", "b", "c"] as const)[index % 3] ?? "a";
+const variant = index === 0 ? "lead" : index % 2 === 1 ? "flip" : "plain";
+---
+
+<article
+  id={`case-${study.slug}`}
+  class:list={["case", `case--${variant}`]}
+  aria-labelledby={`case-${study.slug}-title`}
+  data-reveal
+>
+  <div class="case__text">
+    <div class="case__meta">
+      <span class="case__no mono">{HOME_LABELS.number}&nbsp;{no}</span>
+      <Stamp label={study.stampLabel} status={study.status} tilt={tilt} />
+    </div>
+    <h3 id={`case-${study.slug}-title`} class="case__title" set:html={rich(study.title)} />
+    <p class="case__summary" set:html={rich(study.summary)} />
+    {study.statusNote && <p class="case__status mono" set:html={rich(study.statusNote)} />}
+    <dl class="case__facts">
+      <div>
+        <dt class="mono">{W.role}</dt>
+        <dd set:html={rich(study.role)} />
+      </div>
+      <div>
+        <dt class="mono">{W.stack}</dt>
+        <dd>
+          <ul role="list" class="case__stack">
+            {study.stack.map((tech) => <li class="mono" set:html={rich(tech)} />)}
+          </ul>
+        </dd>
+      </div>
+    </dl>
+    {
+      (study.links.live || study.links.code) && (
+        <p class="case__links">
+          {study.links.live && (
+            <a class="case__link" href={study.links.live} target="_blank" rel="noopener noreferrer">
+              {study.liveLabel ?? W.live}
+              <Arrow dir="up-right" class="case__link-icon" />
+              <span class="sr-only">{HOME_LABELS.external}</span>
+            </a>
+          )}
+          {study.links.code && (
+            <a class="case__link" href={study.links.code} target="_blank" rel="noopener noreferrer">
+              {W.code}
+              <Arrow dir="up-right" class="case__link-icon" />
+              <span class="sr-only">{HOME_LABELS.external}</span>
+            </a>
+          )}
+        </p>
+      )
+    }
+  </div>
+
+  <div class:list={["case__visual", phone && "case__visual--with-phone"]}>
+    {
+      desktop ? (
+        <Shot
+          image={desktop}
+          kind="desktop"
+          alt={study.shotAlt ?? `${study.title}. ${W.desktopAlt}`}
+          caption={caption}
+          eager={index === 0}
+        />
+      ) : (
+        <Composition title={study.title} items={study.stack} />
+      )
+    }
+    {/* The phone capture shows the same site again: decorative, hidden from assistive technology. */}
+    {phone && <Shot image={phone} kind="phone" alt="" />}
+  </div>
+</article>

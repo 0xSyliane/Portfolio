@@ -1,0 +1,107 @@
+---
+/**
+ * Side column: education, skills, languages and links/contact. Comes AFTER the main column in the
+ * DOM (reading order = linear PDF text); CSS places it on the right.
+ * The e-mail is assembled by JS on intent (EmailLink); the PDF generator injects the address from the
+ * CV facts before printing (scripts/cv-pdf.mjs): it is never in the HTML.
+ */
+import EmailLink from "../../components/EmailLink.astro";
+import { isPlaceholder } from "../../lib/placeholder.ts";
+import { rich } from "../../lib/rich.ts";
+import type { Locale } from "../../lib/i18n.ts";
+import type { CvCopy, CvFacts } from "../../content/types.ts";
+import type { CvView } from "./model.ts";
+
+interface Props {
+  locale: Locale;
+  view: CvView;
+  copy: CvCopy;
+  email: CvFacts["email"];
+  todoLabel?: string;
+}
+
+const { locale, view, copy, email, todoLabel } = Astro.props;
+const mail =
+  locale === "fr"
+    ? { label: "E-mail", action: "Écrire un e-mail", noScript: "Activez JavaScript pour afficher l'adresse" }
+    : { label: "Email", action: "Write an email", noScript: "Enable JavaScript to show the address" };
+---
+
+<div class="cv-side">
+  <section class="cv-section" aria-labelledby="cv-education">
+    <h2 class="cv-h2" id="cv-education">{copy.headings.education}</h2>
+    <ul class="cv-entries" role="list">
+      {
+        view.education.map((edu) => (
+          <li class="cv-entry">
+            <p class="cv-entry__period mono" set:html={rich(edu.period, todoLabel)} aria-hidden={edu.period ? undefined : "true"} />
+            <div class="cv-entry__body">
+              <h3 class="cv-entry__title">{edu.institution}</h3>
+              <p class="cv-entry__text" set:html={rich(edu.degree, todoLabel)} />
+              {edu.note && <p class="cv-entry__where mono" set:html={rich(edu.note, todoLabel)} />}
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="cv-section" aria-labelledby="cv-skills">
+    <h2 class="cv-h2" id="cv-skills">{copy.headings.skills}</h2>
+    <dl class="cv-skills">
+      {
+        view.skills.map((group) => (
+          <div class="cv-skills__group">
+            <dt class="cv-skills__label mono">{group.label}</dt>
+            <dd>
+              <ul class="cv-chips mono" role="list">
+                {group.items.map((item) => <li set:html={rich(item, todoLabel)} />)}
+              </ul>
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <section class="cv-section" aria-labelledby="cv-languages">
+    <h2 class="cv-h2" id="cv-languages">{copy.headings.languages}</h2>
+    <ul class="cv-langs" role="list">
+      {
+        view.languages.map((language) => (
+          <li>
+            <span class="cv-langs__name">{language.name}</span>
+            <span class="cv-langs__level mono">
+              {language.cefr && <b class="cv-langs__cefr">{language.cefr}</b>}
+              {language.levelLabel && <span set:html={rich(language.levelLabel, todoLabel)} />}
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="cv-section" aria-labelledby="cv-links">
+    <h2 class="cv-h2" id="cv-links">{copy.headings.links}</h2>
+    <ul class="cv-links" role="list">
+      <li>
+        <span class="cv-links__label">{mail.label}</span>
+        <EmailLink class="cv-mail mono" email={email} label={mail.action} noScript={mail.noScript} todoLabel={todoLabel} />
+      </li>
+      {
+        view.links.map((link) => (
+          <li>
+            <span class="cv-links__label">{link.label}</span>
+            {isPlaceholder(link.url) ? (
+              <span class="mono" set:html={rich(link.url, todoLabel)} />
+            ) : (
+              <a class="mono" href={link.url} target="_blank" rel="noopener noreferrer">
+                {link.urlLabel}
+              </a>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</div>

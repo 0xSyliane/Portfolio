@@ -1,0 +1,56 @@
+---
+import type { Home } from "../../content/types.ts";
+import EmailLink from "../../components/EmailLink.astro";
+import { rich } from "../../lib/rich.ts";
+import Arrow from "./Arrow.astro";
+import { labelsFor } from "./labels.ts";
+import { solid } from "./typo.ts";
+import "./contact.css";
+
+interface Props {
+  contact: Home["contact"];
+  /** Section number shown on the head, e.g. "05". */
+  no: string;
+}
+
+const { contact, no } = Astro.props;
+const HOME_LABELS = labelsFor(Astro.url.pathname);
+const [lead = "", ...rest] = contact.intro.split("\n").filter((line) => line.trim() !== "");
+---
+
+<section id="contact" class="contact ink-band" aria-labelledby="contact-title">
+  <div class="wrap contact__grid">
+    <header class="contact__head">
+      <p class="contact__no mono">{HOME_LABELS.section}&nbsp;{no}</p>
+      <h2 id="contact-title" set:html={rich(contact.heading)} />
+    </header>
+    <div class="contact__body">
+      <p class="contact__lead" set:html={solid(rich(lead))} />
+      <p class="contact__mail">
+        <EmailLink
+          class="contact__mail-link"
+          email={contact.email}
+          label={contact.emailLabel}
+          noScript={contact.emailNoScript}
+        />
+      </p>
+      <p class="contact__alt">
+        <a class="contact__linkedin" href={contact.linkedin.href} target="_blank" rel="noopener noreferrer">
+          {contact.linkedin.label}
+          <Arrow dir="up-right" class="contact__arrow" />
+          <span class="sr-only">{HOME_LABELS.external}</span>
+        </a>
+        {
+          contact.github && (
+            <a class="contact__linkedin" href={contact.github.href} target="_blank" rel="noopener noreferrer">
+              {contact.github.label}
+              <Arrow dir="up-right" class="contact__arrow" />
+              <span class="sr-only">{HOME_LABELS.external}</span>
+            </a>
+          )
+        }
+      </p>
+      {rest.map((line) => <p class="contact__next" set:html={solid(rich(line))} />)}
+    </div>
+  </div>
+</section>

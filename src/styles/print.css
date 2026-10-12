@@ -1,22 +1,63 @@
 /*
- * Print / PDF skeleton. OWNER of the CV print layout: content (Dev B).
- * Platform only guarantees: ink on white, no chrome, visible link targets.
+ * Print / PDF. OWNER: content (Dev B). Source of the CV PDFs (scripts/cv-pdf.mjs).
+ * A4, 12 mm margins, ink on white, 54 mm side column, Bricolage 10.5 pt / mono 8.5 pt (fills ~85 % of the page: real facts will add lines),
+ * one stamp-colour rule, exactly one page (FR and EN). No nav, no footer, real text.
+ * Selectors are prefixed `.cv` / `article.cv` so they win over cv.css (loaded later).
+ */
+@page {
+  size: A4;
+  margin: 10mm 12mm;
+}
+
+/*
+ * Static instances of Bricolage Grotesque, loaded ONLY for print (scripts/make-print-fonts.py).
+ * Chromium embeds the variable web font as Type 3 in the PDF, which breaks word spacing in
+ * text extraction (ATS); static TrueType instances are embedded as CID TrueType.
  */
 @media print {
-  @page {
-    size: A4;
-    margin: 12mm;
+  @font-face {
+    font-family: "Bricolage Print";
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url("/fonts/print/bricolage-print-400.woff2") format("woff2");
   }
 
+  @font-face {
+    font-family: "Bricolage Print";
+    font-style: normal;
+    font-weight: 600;
+    font-display: block;
+    src: url("/fonts/print/bricolage-print-600.woff2") format("woff2");
+  }
+
+  @font-face {
+    font-family: "Bricolage Print";
+    font-style: normal;
+    font-weight: 800;
+    font-display: block;
+    src: url("/fonts/print/bricolage-print-800.woff2") format("woff2");
+  }
+}
+
+@media print {
   :root {
+    --font-display: "Bricolage Print", "Bricolage Fallback", system-ui, sans-serif;
     --paper: #fff;
     --sheet: #fff;
+    --ink: #111;
+    --ink-2: #333;
+    --rule: #555;
+    --hair: #bbb;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
   body {
     background: #fff;
-    color: #000;
+    color: #111;
     font-size: 10pt;
+    line-height: 1.35;
   }
 
   .site-header,
@@ -29,5 +70,230 @@
   a {
     color: inherit;
     text-decoration: none;
+  }
+
+  /* Unknown facts stay visible on paper (the publish gate blocks them anyway). */
+  .todo {
+    background: none;
+    outline: 0.5pt dashed #111;
+  }
+
+  .todo .sr-only {
+    display: none;
+  }
+
+  /* Brackets are printed so the PDF text still contains `[[…]]` (publish gate, H9). */
+  .todo::before {
+    content: "[[";
+  }
+
+  .todo::after {
+    content: "]]";
+  }
+
+  /* ---- CV ---- */
+  article.cv {
+    --step-body: 10pt;
+    --step-mono: 8pt;
+    --step-h3: 11.5pt;
+    --space-1: 1.5pt;
+    --space-2: 3pt;
+    --space-3: 4pt;
+    --space-4: 6pt;
+    --space-5: 9pt;
+    --space-6: 12pt;
+    --space-7: 15pt;
+    --space-8: 18pt;
+    max-inline-size: none;
+    padding: 0;
+  }
+
+  .cv .mono,
+  .cv .cv-chips,
+  .cv code {
+    font-size: 8pt;
+  }
+
+  /* Static (not relative): a positioned header would be painted last and break linear PDF text. */
+  /* Negative tracking on titles shrinks the space glyph below pdftotext's word gap (ATS reads
+     "SylianeSaadbouzid"): no tracking on paper. */
+  article.cv :is(h1, h2, h3, .cv-name, .cv-entry__title) {
+    letter-spacing: 0;
+  }
+
+  .cv .cv-head {
+    position: static;
+    padding: 0 0 8pt;
+    border-block-end: 1.5pt solid var(--stamp);
+  }
+
+  .cv .cv-head::before {
+    content: none;
+  }
+
+  .cv .cv-kicker {
+    font-size: 9pt;
+  }
+
+  .cv .cv-name {
+    margin-block-start: 2pt;
+    font-size: 28pt;
+    line-height: 1;
+  }
+
+  .cv .cv-headline {
+    margin-block-start: 4pt;
+    font-size: 13pt;
+    color: var(--ink-2);
+  }
+
+  .cv .cv-body {
+    grid-template-columns: minmax(0, 1fr) 54mm;
+    gap: 9mm;
+    padding-block-start: 4.5mm;
+  }
+
+  .cv .cv-main .cv-section + .cv-section {
+    margin-block-start: 9pt;
+  }
+
+  .cv .cv-h2 {
+    margin-block-end: 6pt;
+    padding-block-end: 2pt;
+    border-block-end: 0.5pt solid var(--rule);
+    font-size: 9pt;
+  }
+
+  .cv .cv-h2::before {
+    content: none;
+  }
+
+  .cv .cv-summary {
+    font-size: 11pt;
+    line-height: 1.35;
+    max-inline-size: none;
+  }
+
+  .cv .cv-entry {
+    grid-template-columns: 28mm minmax(0, 1fr);
+    gap: 0 4mm;
+    padding-block: 4pt;
+    break-inside: avoid;
+  }
+
+  /* Date on the title row, at the right: the text keeps the full column width. */
+  .cv .cv-entry,
+  .cv .cv-entry:has(> .cv-entry__period:empty) {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0 4mm;
+  }
+
+  .cv .cv-entry__body {
+    display: contents;
+  }
+
+  .cv .cv-entry__body > * {
+    grid-column: 1 / -1;
+  }
+
+  .cv .cv-entry__body > .cv-entry__title {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .cv .cv-entry__period {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: baseline;
+    text-align: end;
+    white-space: nowrap;
+  }
+
+  /* The side column is narrow: there the date sits above the title. */
+  .cv .cv-side .cv-entry,
+  .cv .cv-side .cv-entry:has(> .cv-entry__period:empty) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cv .cv-side .cv-entry__period {
+    grid-column: 1;
+    grid-row: 1;
+    text-align: start;
+  }
+
+  .cv .cv-side .cv-entry__body > .cv-entry__title {
+    grid-row: 2;
+  }
+
+  .cv .cv-entry:first-child {
+    padding-block-start: 0;
+  }
+
+  .cv .cv-entry__title {
+    font-size: 11.5pt;
+  }
+
+  .cv .cv-entry__text {
+    margin-block-start: 3pt;
+  }
+
+  .cv .cv-chips {
+    gap: 3pt 4pt;
+    margin-block-start: 4pt;
+  }
+
+  .cv .cv-chips li {
+    padding: 0.5pt 4pt;
+    border: 0.5pt solid var(--rule);
+  }
+
+  .cv .cv-skills__group {
+    grid-template-columns: 30mm minmax(0, 1fr);
+    gap: 0 4mm;
+    padding-block: 3.5pt;
+    break-inside: avoid;
+  }
+
+  .cv .cv-side .cv-skills__group {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5pt;
+    padding-block: 3pt;
+  }
+
+  /* Side column: skills, languages, links. Flat, hairline on the left. */
+  .cv .cv-side {
+    position: static;
+    padding: 0 0 0 4mm;
+    background: none;
+    border: 0;
+    border-inline-start: 0.5pt solid var(--rule);
+    box-shadow: none;
+    break-inside: avoid;
+  }
+
+  .cv .cv-side .cv-section + .cv-section {
+    margin-block-start: 12pt;
+  }
+
+  .cv .cv-langs,
+  .cv .cv-links {
+    gap: 7pt;
+  }
+
+  .cv .cv-langs__cefr {
+    background: none;
+    color: inherit;
+    border: 0.5pt solid var(--rule);
+  }
+
+  /* The address is injected into .cv-mail by scripts/cv-pdf.mjs from the CV facts (never in the HTML). */
+  .cv .cv-mail {
+    display: block;
+    /* A long address must stay in one piece: wrapped, its last letters become a separate word for ATS. */
+    white-space: nowrap;
+    overflow-wrap: normal;
+    word-break: keep-all;
+    font-size: 8pt;
+    letter-spacing: 0;
   }
 }

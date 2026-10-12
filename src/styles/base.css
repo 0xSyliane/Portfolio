@@ -195,11 +195,21 @@ main:focus {
   border: 0;
 }
 
-/* Visible placeholder marker (must never ship: check:publish). */
+/* Keeps a hyphenated compound ("e-mails") on one line (see features/home/typo.ts). */
+.nb {
+  white-space: nowrap;
+}
+
+/* Visible placeholder marker (must never ship: check:publish). An inline-block so a long marker
+   wraps as one balanced box instead of leaving an orphan (« … ») on its own line. */
 .todo {
+  display: inline-block;
+  max-inline-size: 100%;
   background: oklch(0.93 0.1 95);
   color: var(--ink);
   outline: 1px dashed var(--wait);
+  text-wrap: balance;
+  vertical-align: baseline;
 }
 
 .skip-link {

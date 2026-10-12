@@ -1,0 +1,34 @@
+---
+/** One project / experience row: date rail (mono) + title, context, bullets, stack, link. */
+import { rich } from "../../lib/rich.ts";
+import type { CvEntryView } from "./model.ts";
+
+interface Props {
+  entry: CvEntryView;
+  /** Screen-reader suffix of `[[…]]` markers, in the page language. */
+  todoLabel?: string;
+}
+
+const { entry, todoLabel } = Astro.props;
+---
+
+<li class="cv-entry">
+  <p class="cv-entry__period mono" set:html={rich(entry.period, todoLabel)} aria-hidden={entry.period ? undefined : "true"} />
+  <div class="cv-entry__body">
+    <h3 class="cv-entry__title" set:html={rich(entry.title, todoLabel)} />
+    <p class="cv-entry__where mono" set:html={rich(entry.location, todoLabel)} />
+    {entry.bullets.map((bullet) => <p class="cv-entry__text" set:html={rich(bullet, todoLabel)} />)}
+    <ul class="cv-chips mono" role="list" aria-label="Stack">
+      {entry.stack.map((tech) => <li set:html={rich(tech, todoLabel)} />)}
+    </ul>
+    {
+      entry.url && (
+        <p class="cv-entry__link mono">
+          <a href={entry.url} target="_blank" rel="noopener noreferrer">
+            {entry.urlLabel}
+          </a>
+        </p>
+      )
+    }
+  </div>
+</li>

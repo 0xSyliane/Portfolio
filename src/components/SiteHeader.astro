@@ -11,30 +11,48 @@ const { locale, page } = Astro.props;
 const chrome = CHROME[locale];
 const target = page ? switchTarget(page, locale) : undefined;
 const homeHref = "/fr/";
+const current = Astro.url.pathname;
 ---
 
 <header class="site-header">
   <div class="wrap site-header__inner">
     <a class="site-header__brand" href={homeHref} aria-label={chrome.brandAriaLabel}>{SITE_NAME}</a>
-    <nav class="site-header__nav" aria-label={chrome.navLabel}>
-      <ul role="list">
-        {
-          chrome.nav.map((item) => (
-            <li>
-              <a href={item.href} hreflang={locale === "en" && item.href.startsWith("/fr/") ? "fr" : undefined}>
-                {item.label}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
-    {
-      target && (
-        <a class="site-header__switch mono" href={target.path} hreflang={target.locale} lang={target.locale}>
-          {chrome.switchLabel}
-        </a>
-      )
-    }
+    <div class="site-header__bar">
+      <nav class="site-header__nav" aria-label={chrome.navLabel}>
+        <ul role="list">
+          {
+            chrome.nav.map((item) => {
+              const frenchOnly = locale === "en" && item.href.startsWith("/fr/");
+              return (
+                <li>
+                  <a
+                    href={item.href}
+                    hreflang={frenchOnly ? "fr" : undefined}
+                    aria-current={item.href === current ? "page" : undefined}
+                  >
+                    {item.label}
+                    {frenchOnly && chrome.frenchOnly && <span class="sr-only"> ({chrome.frenchOnly})</span>}
+                  </a>
+                </li>
+              );
+            })
+          }
+        </ul>
+      </nav>
+      {
+        target && (
+          <a
+            class="site-header__switch mono"
+            href={target.path}
+            hreflang={target.locale}
+            lang={target.locale}
+            aria-label={chrome.switchLabel}
+          >
+            <span class="site-header__switch-short" aria-hidden="true">{chrome.switchShort}</span>
+            <span class="site-header__switch-long" aria-hidden="true">{chrome.switchLabel}</span>
+          </a>
+        )
+      }
+    </div>
   </div>
 </header>

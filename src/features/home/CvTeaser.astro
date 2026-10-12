@@ -1,0 +1,32 @@
+---
+import type { Home } from "../../content/types.ts";
+import { rich } from "../../lib/rich.ts";
+import Arrow from "./Arrow.astro";
+import "./cv.css";
+
+interface Props {
+  cvteaser: Home["cvteaser"];
+  /** CV page (HTML). */
+  viewHref: string;
+  /** PDF download. */
+  downloadHref: string;
+}
+
+const { cvteaser, viewHref, downloadHref } = Astro.props;
+---
+
+<section id="cv" class="home-section cv" aria-labelledby="cv-title">
+  <div class="wrap">
+    <div class="cv__sheet" data-reveal>
+      <h2 id="cv-title" class="cv__tag">{cvteaser.title ?? "CV"}</h2>
+      <p class="cv__text" set:html={rich(cvteaser.text)} />
+      <div class="cv__actions">
+        <a class="btn btn--ghost" href={viewHref}>
+          {cvteaser.viewLabel}
+          <Arrow dir="right" class="btn__icon" />
+        </a>
+        <a class="link-quiet" href={downloadHref}>{cvteaser.downloadLabel}</a>
+      </div>
+    </div>
+  </div>
+</section>

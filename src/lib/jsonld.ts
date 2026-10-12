@@ -1,5 +1,6 @@
-import { PROFILE_URLS, SITE_NAME } from "../content/site.ts";
-import type { CaseStudy } from "../content/types.ts";
+import { PROFILE_URLS, SITE_NAME, SITE_NAME_VARIANTS } from "../content/site.ts";
+import type { CaseStudy, CvFacts } from "../content/types.ts";
+import { plain } from "./rich.ts";
 import { absoluteUrl } from "./seo.ts";
 
 export type JsonLd = Record<string, unknown>;
@@ -30,7 +31,7 @@ export const stripPlaceholders = (value: unknown): unknown => {
 };
 
 /** Clean a JSON-LD node; returns undefined if nothing is left. */
-export const cleanLd = (node: JsonLd): JsonLd | undefined => {
+const cleanLd = (node: JsonLd): JsonLd | undefined => {
   const cleaned = stripPlaceholders(node);
   return isPlain(cleaned) ? cleaned : undefined;
 };
@@ -48,6 +49,20 @@ export const serializeLd = (nodes: readonly JsonLd[]): string[] =>
 
 export const personId = (): string => `${absoluteUrl("/fr/")}#person`;
 
+/**
+ * `knowsAbout` topics, taken ONLY from skills already stated in the CV facts (never invented):
+ * every skill item except the generic tools group, without its parenthetical detail
+ * ("Odoo (Python/XML/QWeb)" becomes "Odoo").
+ */
+export const knowsAboutFrom = (facts: Pick<CvFacts, "skills">): string[] => [
+  ...new Set(
+    facts.skills
+      .filter((group) => group.id !== "tools")
+      .flatMap((group) => group.items)
+      .map((item) => item.replace(/\s*\(.*\)\s*$/, "").trim()),
+  ),
+];
+
 /** `Person` node. Optional fields with placeholders are dropped by `cleanLd`. */
 export const personLd = (input: {
   jobTitle: string;
@@ -58,6 +73,7 @@ export const personLd = (input: {
   "@type": "Person",
   "@id": personId(),
   name: SITE_NAME,
+  alternateName: SITE_NAME_VARIANTS,
   jobTitle: input.jobTitle,
   url: absoluteUrl("/fr/"),
   image: input.image,
@@ -77,14 +93,17 @@ export const webSiteLd = (inLanguage: string): JsonLd => ({
   publisher: { "@id": personId() },
 });
 
-/** `CreativeWork` for a case study (author = the Person). Concepts are not emitted. */
+/**
+ * `CreativeWork` for a case study (author = the Person). Concepts and works without a public
+ * URL (the private shop base) are not emitted: a CreativeWork nobody can open adds nothing.
+ */
 export const caseStudyLd = (c: CaseStudy): JsonLd | undefined =>
-  c.kind === "concept"
+  c.kind === "concept" || !c.links.live
     ? undefined
     : {
         "@type": "CreativeWork",
         name: c.title,
-        description: c.summary,
+        description: plain(c.summary),
         author: { "@id": personId() },
         url: c.links.live,
         codeRepository: c.links.code,

@@ -1,0 +1,23 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import HomePage from "../../features/home/HomePage.astro";
+import { homeEn } from "../../content/home.en.ts";
+import { cvFacts } from "../../content/cv/facts.ts";
+import { caseStudyLd, knowsAboutFrom, personLd, webSiteLd } from "../../lib/jsonld.ts";
+
+const caseNodes = homeEn.work.cases.map(caseStudyLd).filter((n) => n !== undefined);
+---
+
+<BaseLayout
+  locale="en"
+  page="home"
+  title={homeEn.meta.title}
+  description={homeEn.meta.description}
+  jsonLd={[
+    personLd({ jobTitle: homeEn.hero.role, city: cvFacts.profile.city, knowsAbout: knowsAboutFrom(cvFacts) }),
+    webSiteLd("en"),
+    ...caseNodes,
+  ]}
+>
+  <HomePage home={homeEn} />
+</BaseLayout>

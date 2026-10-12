@@ -1,0 +1,37 @@
+---
+import { Picture } from "astro:assets";
+import type { Home } from "../../content/types.ts";
+import { rich } from "../../lib/rich.ts";
+import SectionHead from "./SectionHead.astro";
+import { findAsset } from "./assets.ts";
+import "./about.css";
+
+interface Props {
+  about: Home["about"];
+}
+
+const { about } = Astro.props;
+const photo = about.photo ? findAsset(about.photo.src) : undefined;
+---
+
+<section id="a-propos" class="home-section about" aria-labelledby="about-title">
+  <div class="wrap grid12">
+    <SectionHead no="02" id="about-title" heading={about.heading} />
+    <p class="about__pull" data-reveal set:html={rich(about.pull)} />
+    <div class="about__body" data-reveal>
+      {photo && about.photo && (
+        <Picture
+          src={photo}
+          alt={about.photo.alt}
+          widths={[320, 480, 640]}
+          sizes="(min-width: 64rem) 20rem, 80vw"
+          formats={["avif", "webp"]}
+          loading="lazy"
+          decoding="async"
+          class="about__photo"
+        />
+      )}
+      {about.paragraphs.map((p) => <p set:html={rich(p)} />)}
+    </div>
+  </div>
+</section>

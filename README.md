@@ -22,11 +22,13 @@ npm run preview        # serve dist/
 | `npm run check:publish` | pre-publication gate, run after `npm run build` |
 
 `check:publish` is expected to FAIL until all `[[placeholders]]` are replaced. It also fails on
-`*.vercel.app` URLs, inline `<script>`/`<style>`/`style=""`, leftover noindex, plain e-mail addresses,
-unreviewed concept case studies (`anonymised !== true`), stale CV PDFs and denylisted names.
+`*.vercel.app` URLs, inline `<script>`/`<style>`/`style=""`/`on*=` handlers, leftover noindex, any e-mail address in the output
+(and in the PDFs: only the alias configured in `src/content/cv/facts.ts`, never a personal gmail/outlook/hotmail/yahoo/proton address),
+unreviewed concept case studies (`anonymised !== true`), stale CV PDFs and denylisted names (html, `_astro/` assets and PDF text).
 
 Merchant denylist: copy `scripts/.denylist.local.example` to `scripts/.denylist.local` (gitignored) and
-list names/handles that must never appear in `dist/`.
+list names/handles that must never appear in `dist/`. Without the file the gate prints a WARNING, and fails when
+`CI` or `PUBLISH=1` is set (always run the release check with `PUBLISH=1 npm run check:publish`).
 
 ## Conventions
 
@@ -34,8 +36,8 @@ list names/handles that must never appear in `dist/`.
 - Contracts: `src/content/types.ts`. Page registry (paths, hreflang, language switch): `src/lib/i18n.ts`.
 - Canonical origin: `SITE_URL` in `src/content/site.ts` (placeholder until the domain exists).
 - Strict CSP (`script-src 'self'`, `style-src 'self'`): no inline script, no `<style>`, no `style=""`.
-- E-mail is never in the HTML: assembled client-side by `src/scripts/contact.ts` (`EmailLink.astro`).
-- CV PDFs: generated locally from `/fr/cv/` and `/en/cv/` (print media) into `public/cv/` with
+- E-mail is never in the HTML as a whole: `EmailLink.astro` + `src/scripts/contact.ts` build the `mailto:` only on pointer/focus/click.
+- Node >= 22.18. CV PDFs: generated locally from `/fr/cv/` and `/en/cv/` (print media) into `public/cv/` with
   `public/cv/.source-hash` = `computeCvSourceHash()` (`scripts/lib/cv-source-hash.mjs`); committed.
 
 ## Deploy (Vercel, static)

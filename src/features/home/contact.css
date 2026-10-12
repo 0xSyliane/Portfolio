@@ -1,0 +1,135 @@
+/* Contact: inverted ink band. The same tokens, inverted by class. */
+.ink-band {
+  --paper: oklch(0.22 0.03 255);
+  --sheet: oklch(0.27 0.03 255);
+  --ink: oklch(0.975 0.006 105);
+  --ink-2: oklch(0.8 0.02 255);
+  --rule: oklch(0.6 0.03 255);
+  --hair: oklch(0.34 0.02 255);
+  --stamp: oklch(0.74 0.14 30);
+  --link: oklch(0.82 0.1 250);
+  --focus: oklch(0.82 0.1 250);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.contact {
+  --slant: clamp(0.75rem, 0.2rem + 2.4vw, 3rem);
+  margin-block-start: var(--home-section-gap);
+  /* Sits flush on the footer rule (the footer adds its own top margin). */
+  margin-block-end: calc(var(--space-9) * -1);
+  padding-block: calc(var(--space-8) + var(--slant)) var(--space-8);
+  clip-path: polygon(0 var(--slant), 100% 0, 100% 100%, 0 100%);
+}
+
+.contact__grid {
+  display: grid;
+  gap: var(--space-7) var(--col-gap);
+}
+
+.contact__no {
+  color: var(--ink-2);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.contact__head h2 {
+  margin-block-start: var(--space-3);
+  font-size: var(--step-h2);
+}
+
+.contact__body {
+  display: grid;
+  gap: var(--space-5);
+  align-content: start;
+}
+
+.contact__lead {
+  max-width: 36ch;
+  font-size: clamp(1.375rem, 1.1rem + 1.2vw, 2.25rem);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+.contact__mail {
+  max-width: none;
+}
+
+.contact__mail-link {
+  color: var(--ink);
+  font-size: 1.0625rem;
+  text-decoration: none;
+}
+
+.contact__mail-link.is-live {
+  display: inline-block;
+  font-size: clamp(1.5rem, 0.9rem + 3.4vw, 4rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  text-decoration: underline;
+  text-decoration-color: var(--stamp);
+  text-decoration-thickness: 0.09em;
+  text-underline-offset: 0.14em;
+  overflow-wrap: anywhere;
+}
+
+.contact__mail-link.is-live:hover {
+  color: var(--stamp);
+}
+
+.contact__alt {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+  max-width: none;
+}
+
+.contact__linkedin {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: 2.75rem;
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration-color: var(--stamp);
+  text-decoration-thickness: 0.12em;
+}
+
+.contact__linkedin:hover {
+  color: var(--stamp);
+}
+
+.contact__arrow {
+  inline-size: 1.05em;
+  block-size: 1.05em;
+  flex: none;
+}
+
+.contact__next {
+  max-width: 46ch;
+  padding-block-start: var(--space-5);
+  border-block-start: 1px solid var(--rule);
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+}
+
+@media (min-width: 64rem) {
+  .contact__grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .contact__head {
+    grid-column: 1 / 5;
+  }
+
+  .contact__body {
+    grid-column: 5 / 13;
+    padding-block-start: var(--space-7);
+  }
+}
+
+/* Placeholder markers keep dark text on their yellow even when tokens are inverted. */
+.ink-band .todo {
+  color: oklch(0.22 0.03 255);
+}

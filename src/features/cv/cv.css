@@ -1,0 +1,331 @@
+/*
+ * CV page (screen). OWNER: content (Dev B). Print layout: src/styles/print.css.
+ * Direction: a numbered "relevé" sheet (concept « Bon de livraison »): mono refs,
+ * a date rail, one stamp-colour rule, the side column as a tinted sheet.
+ * Tokens only (src/styles/tokens.css); no inline style, no animation.
+ */
+.cv {
+  counter-reset: cv-section;
+  padding-block-start: var(--space-7);
+}
+
+/* ---- Header ---- */
+.cv-head {
+  position: relative;
+  padding-block-start: var(--space-5);
+  padding-block-end: var(--space-6);
+  border-block-end: var(--border);
+}
+
+.cv-head::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inline-size: 4.5rem;
+  block-size: 6px;
+  background: var(--stamp);
+}
+
+.cv-kicker {
+  color: var(--ink-2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cv-name {
+  margin-block-start: var(--space-3);
+  font-size: clamp(2.5rem, 1.4rem + 5.6vw, 6rem);
+  line-height: 0.98;
+}
+
+.cv-headline {
+  margin-block-start: var(--space-4);
+  font-size: clamp(1.25rem, 1.05rem + 1vw, 1.875rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  color: var(--ink-2);
+}
+
+.cv-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-4);
+  margin-block-start: var(--space-5);
+  max-inline-size: none;
+}
+
+.cv-button,
+.cv-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-block-size: 44px;
+  padding-inline: var(--space-4);
+  border-radius: var(--radius);
+  text-decoration: none;
+}
+
+.cv-button {
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 600;
+}
+
+.cv-button:hover {
+  background: var(--link);
+  text-decoration: none;
+}
+
+.cv-button__ref {
+  padding: 0 var(--space-2);
+  border: 1px solid currentcolor;
+  border-radius: var(--radius);
+  letter-spacing: 0.06em;
+}
+
+.cv-switch {
+  border: var(--border);
+  color: var(--ink);
+}
+
+.cv-switch:hover {
+  border-color: var(--ink);
+  text-decoration: none;
+}
+
+/* ---- Body: main column + side sheet ---- */
+.cv-body {
+  display: grid;
+  gap: var(--space-7);
+  padding-block-start: var(--space-6);
+}
+
+.cv-main .cv-section + .cv-section {
+  margin-block-start: var(--space-7);
+}
+
+.cv-h2 {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin-block-end: var(--space-5);
+  padding-block-end: var(--space-2);
+  border-block-end: 1px solid var(--rule);
+  font-family: var(--font-mono);
+  font-size: var(--step-mono);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+.cv-h2::before {
+  counter-increment: cv-section;
+  content: "N° " counter(cv-section, decimal-leading-zero);
+  color: var(--stamp);
+}
+
+/* "N°" is French: the English page says "No.". */
+@media screen {
+  .cv:lang(en) .cv-h2::before {
+    content: "No. " counter(cv-section, decimal-leading-zero);
+  }
+}
+
+.cv-summary {
+  font-size: clamp(1.125rem, 1rem + 0.5vw, 1.5rem);
+  line-height: 1.4;
+  max-inline-size: 48ch;
+}
+
+/* ---- Entries (projects, education) ---- */
+.cv-entries {
+  display: grid;
+}
+
+.cv-entry {
+  display: grid;
+  gap: var(--space-2) var(--space-5);
+  padding-block: var(--space-5);
+  border-block-start: 1px solid var(--hair);
+}
+
+.cv-entry:first-child {
+  border-block-start: 0;
+  padding-block-start: 0;
+}
+
+.cv-entry__period {
+  color: var(--ink-2);
+  max-inline-size: none;
+}
+
+.cv-entry__period:empty {
+  display: none;
+}
+
+.cv-entry:hover .cv-entry__period {
+  color: var(--stamp);
+}
+
+.cv-entry__where {
+  margin-block-start: var(--space-1);
+  color: var(--ink-2);
+}
+
+.cv-entry__text {
+  margin-block-start: var(--space-3);
+}
+
+.cv-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-block-start: var(--space-3);
+}
+
+.cv-chips li {
+  padding: 0 var(--space-2);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  color: var(--ink-2);
+}
+
+.cv-entry__link {
+  margin-block-start: var(--space-3);
+  max-inline-size: none;
+  overflow-wrap: anywhere;
+}
+
+/* ---- Skills: grouped, no bars ---- */
+.cv-skills {
+  display: grid;
+}
+
+.cv-skills__group {
+  display: grid;
+  gap: var(--space-2) var(--space-5);
+  padding-block: var(--space-4);
+  border-block-start: 1px solid var(--hair);
+}
+
+.cv-skills__group:first-child {
+  border-block-start: 0;
+  padding-block-start: 0;
+}
+
+.cv-skills__label {
+  color: var(--ink-2);
+}
+
+.cv-skills .cv-chips {
+  margin-block-start: 0;
+}
+
+/* Education in the side sheet: the date stacks above the title (the sheet is narrow). */
+.cv-side .cv-entry {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* In the side sheet each skill group stacks: label above its chips (the sheet is narrow). */
+.cv-side .cv-skills__group {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-1);
+}
+
+/* ---- Side sheet: skills, languages, links ---- */
+.cv-side {
+  padding: var(--space-5);
+  background: var(--sheet);
+  border: var(--border);
+  box-shadow: 6px 6px 0 var(--hair);
+  align-self: start;
+}
+
+.cv-side .cv-section + .cv-section {
+  margin-block-start: var(--space-6);
+}
+
+.cv-langs,
+.cv-links {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.cv-langs li {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.cv-langs__name {
+  font-weight: 600;
+}
+
+.cv-langs__level {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+  color: var(--ink-2);
+}
+
+.cv-langs__cefr {
+  padding: 0 var(--space-2);
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 500;
+  border-radius: var(--radius);
+}
+
+.cv-links li {
+  display: grid;
+  gap: var(--space-1);
+  overflow-wrap: anywhere;
+}
+
+.cv-links__label {
+  font-weight: 600;
+}
+
+.cv-mail {
+  justify-self: start;
+}
+
+.email-link--pending {
+  color: var(--ink-2);
+}
+
+/* ---- Wider screens ---- */
+@media (min-width: 40rem) {
+  .cv-entry {
+    grid-template-columns: 9.5rem minmax(0, 1fr);
+  }
+
+  /* No known period (yet): no empty date column. */
+  .cv-entry:has(> .cv-entry__period:empty) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cv-skills__group {
+    grid-template-columns: 12rem minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 60rem) {
+  .cv-body {
+    grid-template-columns: minmax(0, 1fr) 19rem;
+    gap: var(--space-8);
+  }
+}
+
+/* Sticky only when the column fits the viewport: at 200 % zoom a taller-than-screen sticky
+   box would hide its own lower part (WCAG 2.4.11). */
+@media (min-width: 60rem) and (min-height: 45rem) {
+  .cv-side {
+    position: sticky;
+    inset-block-start: var(--space-8);
+  }
+}

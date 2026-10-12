@@ -5,6 +5,8 @@
   "compilerOptions": {
     "types": ["node"],
     "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": false
+    "exactOptionalPropertyTypes": false,
+    "allowJs": true,
+    "checkJs": true
   }
 }

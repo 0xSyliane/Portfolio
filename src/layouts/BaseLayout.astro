@@ -15,7 +15,7 @@ import SiteFooter from "../components/SiteFooter.astro";
 import { CHROME, SITE_NAME, THEME_COLOR } from "../content/site.ts";
 import { buildHead, absoluteUrl, pageTitle } from "../lib/seo.ts";
 import { serializeLd, type JsonLd } from "../lib/jsonld.ts";
-import type { Locale, PageId } from "../lib/i18n.ts";
+import { OG_LOCALE, type Locale, type PageId } from "../lib/i18n.ts";
 
 interface Props {
   locale: Locale;
@@ -38,6 +38,8 @@ const head = page
 const fullTitle = head?.title ?? pageTitle(title);
 const ogImageUrl = head?.ogImage ?? absoluteUrl(ogImage ?? `/og-${locale}.png`);
 const ldBlocks = serializeLd(jsonLd);
+/** The share card is the name and role set in type: its alt is the page title. */
+const ogImageAlt = fullTitle;
 ---
 
 <!doctype html>
@@ -53,21 +55,26 @@ const ldBlocks = serializeLd(jsonLd);
     {head && <link rel="canonical" href={head.canonical} />}
     {head?.alternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link rel="preload" href={fontDisplay} as="font" type="font/woff2" crossorigin />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={SITE_NAME} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     {head && <meta property="og:url" content={head.canonical} />}
-    <meta property="og:locale" content={head?.ogLocale ?? (locale === "fr" ? "fr_FR" : "en_GB")} />
+    <meta property="og:locale" content={head?.ogLocale ?? OG_LOCALE[locale]} />
     {head?.ogAlternateLocales.map((l) => <meta property="og:locale:alternate" content={l} />)}
     <meta property="og:image" content={ogImageUrl} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogImageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
     {ldBlocks.map((json) => <script type="application/ld+json" set:html={json} />)}
     <slot name="head" />
   </head>

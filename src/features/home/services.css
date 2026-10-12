@@ -1,0 +1,60 @@
+/* Offers: two quiet rows near the bottom of the page. No prices, just a way to get in touch. */
+.offers {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 0;
+  border-block-end: var(--home-rule-heavy);
+}
+
+.offers__row {
+  display: grid;
+  gap: var(--space-2);
+  padding-block: var(--space-5);
+  border-block-start: 1px solid var(--rule);
+}
+
+.offers__row p {
+  max-width: none;
+}
+
+.offers__ref {
+  color: var(--stamp);
+  font-weight: 500;
+}
+
+.offers__row h3 {
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.offers__summary {
+  color: var(--ink-2);
+  max-width: 44ch;
+}
+
+.offers__cta {
+  grid-column: 1 / -1;
+  margin-block-start: var(--space-6);
+}
+
+@media (min-width: 48rem) {
+  .offers__row {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--col-gap);
+    align-items: baseline;
+  }
+
+  .offers__ref {
+    grid-column: 1 / 2;
+  }
+
+  .offers__row h3 {
+    grid-column: 2 / 8;
+  }
+
+  .offers__summary {
+    grid-column: 8 / 13;
+  }
+}

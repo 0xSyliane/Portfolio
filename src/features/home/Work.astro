@@ -1,0 +1,30 @@
+---
+import type { Home } from "../../content/types.ts";
+import { rich } from "../../lib/rich.ts";
+import Arrow from "./Arrow.astro";
+import CaseSheet from "./CaseSheet.astro";
+import SectionHead from "./SectionHead.astro";
+import "./work.css";
+
+interface Props {
+  work: Home["work"];
+}
+
+const { work } = Astro.props;
+---
+
+<section id="travaux" class="home-section work" aria-labelledby="work-title">
+  <div class="wrap grid12">
+    <SectionHead no="01" id="work-title" heading={work.heading} intro={work.intro || undefined} />
+  </div>
+  <div class="wrap work__cases">
+    {work.cases.map((study, index) => <CaseSheet study={study} index={index} />)}
+  </div>
+  <div class="wrap work__foot">
+    {work.conceptsNote && <p class="work__note mono" set:html={rich(work.conceptsNote)} />}
+    <a class="link-quiet work__cta" href="#contact">
+      {work.cta}
+      <Arrow dir="right" class="work__cta-icon" />
+    </a>
+  </div>
+</section>

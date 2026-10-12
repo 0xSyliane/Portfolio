@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import HomePage from "../../features/home/HomePage.astro";
 import { homeFr } from "../../content/home.fr.ts";
-import { caseStudyLd, personLd, webSiteLd } from "../../lib/jsonld.ts";
+import { cvFacts } from "../../content/cv/facts.ts";
+import { caseStudyLd, knowsAboutFrom, personLd, webSiteLd } from "../../lib/jsonld.ts";
 
 const caseNodes = homeFr.work.cases.map(caseStudyLd).filter((n) => n !== undefined);
 ---
@@ -13,7 +14,7 @@ const caseNodes = homeFr.work.cases.map(caseStudyLd).filter((n) => n !== undefin
   title={homeFr.meta.title}
   description={homeFr.meta.description}
   jsonLd={[
-    personLd({ jobTitle: homeFr.hero.role }),
+    personLd({ jobTitle: homeFr.hero.role, city: cvFacts.profile.city, knowsAbout: knowsAboutFrom(cvFacts) }),
     webSiteLd("fr"),
     ...caseNodes,
   ]}

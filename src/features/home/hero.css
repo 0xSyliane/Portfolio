@@ -1,0 +1,166 @@
+/* Hero: name + role are the LCP text; nothing here animates on load except stamps. */
+.hero {
+  position: relative;
+  isolation: isolate;
+  padding-block: clamp(2.5rem, 1.5rem + 5vw, 6rem) 0;
+}
+
+/* Ledger ruling, decorative, fading out towards the bottom. */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(2.75rem - 1px),
+    var(--hair) calc(2.75rem - 1px),
+    var(--hair) 2.75rem
+  );
+  mask-image: linear-gradient(to bottom, transparent, #000 35%, #000 70%, transparent);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.hero__grid {
+  display: grid;
+  gap: var(--space-8) var(--col-gap);
+  align-items: end;
+}
+
+.hero__eyebrow {
+  display: inline-block;
+  margin-block-end: var(--space-5);
+  padding: var(--space-1) var(--space-3);
+  border: var(--border);
+  background: var(--paper);
+  color: var(--ink-2);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.hero__title {
+  font-size: clamp(2.6rem, 1.2rem + 8vw, 9.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.hero__name {
+  display: block;
+  color: var(--ink);
+}
+
+.hero__role {
+  display: block;
+  max-width: 18ch;
+  margin-block-start: var(--space-4);
+  padding-inline-start: var(--space-4);
+  border-inline-start: 6px solid var(--stamp);
+  color: var(--stamp);
+  font-size: clamp(1.5rem, 1rem + 2.6vw, 3.75rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+
+.hero__lede {
+  max-width: 34ch;
+  margin-block-start: var(--space-6);
+  font-size: clamp(1.1875rem, 1.05rem + 0.7vw, 1.625rem);
+  line-height: 1.35;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-5) var(--space-6);
+  margin-block-start: var(--space-7);
+}
+
+.hero__availability {
+  margin-block-start: var(--space-4);
+  color: var(--ink-2);
+}
+
+/* "Bon": the projects as numbered ledger lines, each with its stamp. */
+.hero__bon {
+  position: relative;
+  padding: var(--space-5);
+  border: var(--border);
+  border-block-start: var(--home-rule-heavy);
+  background: var(--sheet);
+}
+
+.hero__bon-head {
+  margin-block-end: var(--space-3);
+  color: var(--ink-2);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hero__bon-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: var(--space-1) var(--space-4);
+  padding-block: var(--space-4);
+  border-block-start: 1px solid var(--rule);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.hero__bon-row .stamp {
+  grid-column: 2;
+  justify-self: start;
+  margin-block-start: var(--space-2);
+}
+
+.hero__bon-no {
+  color: var(--ink-2);
+}
+
+.hero__bon-title {
+  font-size: 1.1875rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.hero__bon-row:hover .hero__bon-title {
+  color: var(--link);
+  text-decoration: underline;
+  text-decoration-thickness: 0.1em;
+  text-underline-offset: 0.2em;
+}
+
+@media (min-width: 64rem) {
+  .hero__grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .hero__main {
+    grid-column: 1 / 9;
+  }
+
+  .hero__bon {
+    grid-column: 9 / 13;
+    margin-block-end: var(--space-2);
+  }
+
+  .hero__bon-row {
+    grid-template-columns: 1fr;
+  }
+
+  .hero__bon-row .stamp {
+    grid-column: 1;
+  }
+}
+
+@media (min-width: 64rem) and (max-width: 80rem) {
+  .hero__title {
+    font-size: clamp(2.6rem, 1rem + 6.6vw, 6.5rem);
+  }
+}

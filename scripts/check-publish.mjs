@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// @ts-check
 // Pre-publication gate (decision D-03 / threat model H9). Run after `npm run build`.
 // Exit 1 while anything is pending: unfinished [[placeholders]], preview URLs,
 // inline styles/scripts, leftover noindex, un-reviewed concepts, stale CV PDFs,

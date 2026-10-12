@@ -58,3 +58,13 @@ test("hashed assets are immutable", () => {
   const rule = config.headers.find((r) => r.source === "/_astro/(.*)");
   assert.match(rule?.headers[0]?.value ?? "", /immutable/);
 });
+
+test("unhashed files get a bounded cache: print fonts for a week, CV PDFs for an hour and revalidated", () => {
+  const find = (source: string, key: string): string | undefined =>
+    config.headers.find((r) => r.source === source)?.headers.find((h) => h.key === key)?.value;
+  assert.equal(find("/fonts/print/(.*)", "Cache-Control"), "public, max-age=604800");
+  const pdf = find("/cv/(.*)\\.pdf", "Cache-Control") ?? "";
+  assert.match(pdf, /max-age=3600/);
+  assert.match(pdf, /must-revalidate/);
+  assert.ok(!/immutable/.test(pdf) && !/immutable/.test(find("/fonts/print/(.*)", "Cache-Control") ?? ""), "unhashed: never immutable");
+});

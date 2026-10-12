@@ -70,10 +70,19 @@ export interface CaseStudy {
   readonly slug: string;
   readonly kind: CaseKind;
   readonly status: CaseStatus;
-  /** Text printed on the stamp, e.g. "LIVRÉ · [[mois]]" or "EXPLORATION". */
+  /** Text printed on the stamp, written in sentence case ("En ligne"); CSS uppercases it. */
   readonly stampLabel: string;
   readonly title: string;
+  /**
+   * Visible text of the live link, distinct per case (« Voir Blaze Type en ligne »): identical
+   * link texts are ambiguous in a links list and weak for SEO. Defaults to a generic label.
+   */
+  readonly liveLabel?: string;
+  /** Alt text of the desktop capture: what it shows (the phone capture is decorative, alt ""). */
+  readonly shotAlt?: string;
   readonly summary: string;
+  /** Honest one-liner printed under the summary, e.g. "Pas de commande client." Not a repeat of the stamp. */
+  readonly statusNote?: string;
   /** What the author did, e.g. "Conception et développement". */
   readonly role: string;
   readonly stack: readonly string[];
@@ -97,17 +106,7 @@ export interface CaseStudy {
 /* -------------------------------------------------------------------------- */
 
 export interface Service {
-  /** Short ledger reference, e.g. "S-01". */
-  readonly ref: string;
-  readonly title: string;
-  readonly summary: string;
-  /** What the client gets. */
-  readonly deliverable: string;
-  /** Price as text. Keep `[[prix]]` until an accountant confirms. */
-  readonly price: string;
-}
-
-export interface MethodStep {
+  /** Short reference, e.g. "S-01". */
   readonly ref: string;
   readonly title: string;
   readonly summary: string;
@@ -133,6 +132,13 @@ export interface Home {
     readonly description: string;
   };
   readonly hero: {
+    /** Small line above the title (place, mode), e.g. "Alger · en télétravail · freelance". */
+    readonly eyebrow: string;
+    /**
+     * Availability line, e.g. "Disponible à partir de …". Rendered under the CTAs; while it is a
+     * `[[placeholder]]` it shows as the yellow marker and blocks `check:publish`. Omit to hide it.
+     */
+    readonly availability?: string;
     /** Display name: "Syliane Saadbouzid". Becomes the h1 start. */
     readonly name: string;
     /** Positioning line, e.g. "Développeur web et automatisation". */
@@ -141,11 +147,13 @@ export interface Home {
     readonly ctaPrimary: Link;
     readonly ctaSecondary: Link;
   };
-  /** Exactly two offers in V1. */
+  /** Offers: a short section near the bottom of the page. No prices, it only asks to get in touch. */
   readonly services: {
     readonly heading: string;
     readonly intro: string;
     readonly items: readonly [Service, Service];
+    /** Label of the link that jumps to the contact section. */
+    readonly cta: string;
   };
   readonly work: {
     readonly heading: string;
@@ -153,11 +161,8 @@ export interface Home {
     readonly cases: readonly CaseStudy[];
     /** One-line honesty note about concepts / exploration. */
     readonly conceptsNote: string;
-  };
-  readonly method: {
-    readonly heading: string;
-    readonly intro: string;
-    readonly steps: readonly MethodStep[];
+    /** Call to action after the cases, jumps to the contact section. */
+    readonly cta: string;
   };
   readonly about: {
     readonly heading: string;
@@ -165,6 +170,16 @@ export interface Home {
     readonly pull: string;
     readonly paragraphs: readonly string[];
     readonly photo?: ImageRef;
+  };
+  /** Teaser linking to the CV page and its PDF (the PDF link itself is `hero.ctaSecondary`). */
+  readonly cvteaser: {
+    /** Heading tag, defaults to "CV". */
+    readonly title?: string;
+    readonly text: string;
+    /** Label of the link to the CV page. */
+    readonly viewLabel: string;
+    /** Label of the PDF download link. */
+    readonly downloadLabel: string;
   };
   readonly contact: {
     readonly heading: string;
@@ -176,8 +191,8 @@ export interface Home {
     readonly linkedin: Link;
     readonly github?: Link;
   };
+  /** Page-specific footer data. The site footer itself (rights, legal link) is `CHROME` in site.ts. */
   readonly footer: {
-    readonly line: string;
     /** Optional measured-quality line (renders only if present and fresh). */
     readonly measure?: Measure;
   };
@@ -207,7 +222,8 @@ export interface CvFacts {
     readonly id: string;
     readonly kind: CvEntryKind;
     readonly org: string;
-    readonly start: IsoDate;
+    /** Omit while unknown: the period is then simply not shown. */
+    readonly start?: IsoDate;
     /** Omit when ongoing. */
     readonly end?: IsoDate;
     readonly stack: readonly string[];
@@ -216,7 +232,8 @@ export interface CvFacts {
   readonly education: readonly {
     readonly id: string;
     readonly institution: string;
-    readonly start: IsoDate;
+    /** Omit while unknown: the period is then simply not shown. */
+    readonly start?: IsoDate;
     readonly end?: IsoDate;
   }[];
   readonly skills: readonly {
@@ -226,7 +243,8 @@ export interface CvFacts {
   }[];
   readonly languages: readonly {
     readonly code: Locale | "ar";
-    readonly level: CefrOrPlaceholder;
+    /** Omit while unknown: the language is listed without a level. */
+    readonly level?: CefrOrPlaceholder;
   }[];
   /** https only. */
   readonly links: readonly {
@@ -252,6 +270,8 @@ export interface CvCopy {
     readonly links: string;
   };
   readonly headline: string;
+  /** City as printed in the kicker, in this language ("Alger" / "Algiers"). */
+  readonly place: string;
   readonly summary: string;
   readonly downloadPdf: Link;
   readonly entries: readonly {
@@ -273,7 +293,7 @@ export interface CvCopy {
     readonly code: Locale | "ar";
     readonly name: string;
     /** Human label of the level, e.g. "Langue maternelle" / "Courant (C1)". */
-    readonly levelLabel: string;
+    readonly levelLabel?: string;
   }[];
   readonly linkLabels: Readonly<Record<"github" | "linkedin" | "portfolio", string>>;
   /** "Présent" / "Present". */
@@ -289,7 +309,14 @@ export interface Chrome {
   readonly brandAriaLabel: string;
   readonly navLabel: string;
   readonly nav: readonly Link[];
+  /** Language-switch target name, e.g. "English" (accessible name and desktop text). */
   readonly switchLabel: string;
+  /** Short visible form on phones, e.g. "EN". */
+  readonly switchShort: string;
+  /** Screen-reader suffix of a `[[…]]` marker: « à confirmer » / « to confirm ». */
+  readonly todoLabel: string;
+  /** Screen-reader suffix for links that lead to French-only pages (EN chrome only). */
+  readonly frenchOnly?: string;
   readonly footer: {
     readonly legal: Link;
     readonly rights: string;

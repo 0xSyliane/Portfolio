@@ -17,9 +17,9 @@ export type PageId = "home" | "cv" | "legal";
  * Paths are root-relative, lowercase, with a trailing slash.
  */
 export const PAGES: Readonly<Record<PageId, Readonly<Partial<Record<Locale, string>>>>> = {
-  home: { fr: "/fr/" },
+  home: { fr: "/fr/", en: "/en/" },
   cv: { fr: "/fr/cv/", en: "/en/cv/" },
-  legal: { fr: "/fr/mentions-legales/" },
+  legal: { fr: "/fr/mentions-legales/", en: "/en/legal-notice/" },
 };
 
 /** Path of `page` in `locale`, or undefined if that translation does not exist. */
@@ -78,11 +78,15 @@ export const formatIsoDate = (iso: string, locale: Locale): string => {
   return label ? `${label} ${year}` : (year as string);
 };
 
-/** True for `YYYY`, `YYYY-MM`, `YYYY-MM-DD` with a valid month/day range. */
+/** True for `YYYY`, `YYYY-MM`, `YYYY-MM-DD` that exist on the calendar (2025-02-30 does not). */
 export const isIsoDate = (value: string): boolean => {
   const match = /^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?$/.exec(value);
   if (!match) return false;
+  const year = Number(match[1]);
   const month = match[2] ? Number(match[2]) : 1;
   const day = match[3] ? Number(match[3]) : 1;
-  return month >= 1 && month <= 12 && day >= 1 && day <= 31;
+  if (month < 1 || month > 12) return false;
+  const leap = (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+  const daysInMonth = [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month - 1] ?? 0;
+  return day >= 1 && day <= daysInMonth;
 };

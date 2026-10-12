@@ -22,11 +22,36 @@ test("rich renders safe links only (https, root-relative, anchors)", () => {
 });
 
 test("rich refuses javascript:, data:, http: and attribute-breaking URLs", () => {
-  assert.equal(rich("[x](javascript:alert(1))"), "x)");
+  assert.equal(rich("[x](javascript:alert(1))"), "x");
   assert.equal(rich("[x](data:text/html;base64,AAAA)"), "x");
   assert.equal(rich("[x](http://insecure.example)"), "x");
   assert.ok(!rich('[x](https://a.example/"onmouseover="alert(1))').includes('"onmouseover'));
   assert.ok(!rich("[<b>x</b>](https://a.example)").includes("<b>"));
+});
+
+test("rich refuses protocol-relative and backslash targets, and a URL cannot carry emphasis", () => {
+  assert.equal(rich("[x](//evil.example/a)"), "x");
+  assert.equal(rich("[x](/\\evil.example)"), "x");
+  assert.equal(rich("[x](/ok/path)"), '<a href="/ok/path">x</a>');
+  const out = rich("[x](https://a.example/*b*) et *vrai*");
+  assert.ok(!/href="[^"]*<em>/.test(out), out);
+  assert.ok(out.endsWith("<em>vrai</em>"), out);
+});
+
+test("rich keeps a URL with balanced parentheses in one piece", () => {
+  assert.equal(
+    rich("[w](https://fr.wikipedia.org/wiki/A_(b))"),
+    '<a href="https://fr.wikipedia.org/wiki/A_(b)" target="_blank" rel="noopener noreferrer">w</a>',
+  );
+});
+
+test("a marker that already says it is unconfirmed gets no duplicate screen-reader suffix", () => {
+  assert.equal(
+    rich("[[à confirmer : disponibilité]]", "à confirmer"),
+    '<span class="todo" data-todo>à confirmer : disponibilité</span>',
+  );
+  assert.ok(rich("[[to confirm: year]]", "to confirm").includes("(to confirm)") === false);
+  assert.ok(rich("[[année]]", "à confirmer").includes('(à confirmer)'));
 });
 
 test("rich renders [[placeholders]] as a visible marker", () => {
@@ -38,6 +63,7 @@ test("rich renders [[placeholders]] as a visible marker", () => {
 
 test("plain strips markup", () => {
   assert.equal(plain("**A** *b* [lien](https://x.example)\nfin"), "A b lien fin");
+  assert.equal(plain("[w](https://fr.wikipedia.org/wiki/A_(b))"), "w");
 });
 
 test("isPlaceholder / hasPlaceholder / findPlaceholders", () => {

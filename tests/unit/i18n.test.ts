@@ -15,37 +15,41 @@ import { absoluteUrl, buildHead, pageTitle } from "../../src/lib/seo.ts";
 
 const pageIds = Object.keys(PAGES) as PageId[];
 
-test("V1 page set: home, legal FR only; CV in FR and EN", () => {
-  assert.deepEqual(localesOf("home"), ["fr"]);
-  assert.deepEqual(localesOf("legal"), ["fr"]);
-  assert.deepEqual(localesOf("cv"), ["fr", "en"]);
+test("page set: home, legal and CV exist in FR and EN", () => {
+  for (const page of ["home", "legal", "cv"] as const) assert.deepEqual(localesOf(page), ["fr", "en"], page);
+  assert.equal(pathFor("home", "en"), "/en/");
+  assert.equal(pathFor("legal", "en"), "/en/legal-notice/");
 });
 
-test("single-locale pages have no alternates and no language switch", () => {
-  for (const page of ["home", "legal"] as const) {
-    assert.deepEqual(alternatesFor(page), []);
-    assert.equal(switchTarget(page, "fr"), undefined);
+test("every page has reciprocal alternates and a language switch", () => {
+  for (const page of ["home", "legal", "cv"] as const) {
+    assert.equal(alternatesFor(page).length, 3, page);
+    assert.equal(switchTarget(page, "fr")?.locale, "en");
+    assert.equal(switchTarget(page, "en")?.locale, "fr");
   }
 });
 
-test("hreflang is reciprocal: every alternate lists the same set, x-default is FR", () => {
+test("hreflang set lists every real locale path once, plus an x-default pointing to FR", () => {
   const set = alternatesFor("cv");
   assert.deepEqual(
     set.map((a) => a.hreflang),
     ["fr", "en", "x-default"],
   );
+  assert.deepEqual(
+    set.filter((a) => a.hreflang !== "x-default").map((a) => [a.hreflang, a.path]),
+    localesOf("cv").map((locale) => [locale, PAGES.cv[locale]]),
+  );
   assert.equal(set.find((a) => a.hreflang === "x-default")?.path, pathFor("cv", "fr"));
-  for (const locale of localesOf("cv")) {
-    const self = pathFor("cv", locale);
-    assert.ok(set.some((a) => a.path === self), `${locale} lists itself`);
-  }
 });
 
-test("the language switch is reciprocal", () => {
-  const toEn = switchTarget("cv", "fr");
-  const toFr = switchTarget("cv", "en");
-  assert.deepEqual(toEn, { locale: "en", path: "/en/cv/" });
-  assert.deepEqual(toFr, { locale: "fr", path: "/fr/cv/" });
+test("the language switch is reciprocal: following it twice comes back to the start", () => {
+  for (const locale of localesOf("cv")) {
+    const there = switchTarget("cv", locale);
+    assert.ok(there, `${locale} has a switch`);
+    assert.notEqual(there.locale, locale);
+    assert.deepEqual(switchTarget("cv", there.locale), { locale, path: pathFor("cv", locale) });
+  }
+  assert.deepEqual(switchTarget("cv", "fr"), { locale: "en", path: "/en/cv/" });
 });
 
 test("every path is lowercase, locale-prefixed and ends with a slash", () => {
@@ -58,7 +62,7 @@ test("every path is lowercase, locale-prefixed and ends with a slash", () => {
   }
 });
 
-test("buildHead: self-referencing absolute canonical, alternates only for the CV", () => {
+test("buildHead: self-referencing absolute canonical, alternates on every page", () => {
   const cv = buildHead({ page: "cv", locale: "en", title: "CV", description: "d" }, "https://x.example");
   assert.equal(cv.canonical, "https://x.example/en/cv/");
   assert.equal(cv.alternates.length, 3);
@@ -66,8 +70,9 @@ test("buildHead: self-referencing absolute canonical, alternates only for the CV
   assert.deepEqual(cv.ogAlternateLocales, ["fr_FR"]);
   const home = buildHead({ page: "home", locale: "fr", title: "T", description: "d" }, "https://x.example");
   assert.equal(home.canonical, "https://x.example/fr/");
-  assert.equal(home.alternates.length, 0);
-  assert.throws(() => buildHead({ page: "home", locale: "en", title: "T", description: "d" }));
+  assert.equal(home.alternates.length, 3);
+  const homeEn = buildHead({ page: "home", locale: "en", title: "T", description: "d" }, "https://x.example");
+  assert.equal(homeEn.canonical, "https://x.example/en/");
 });
 
 test("absoluteUrl keeps a [[placeholder]] origin visible instead of throwing", () => {
@@ -86,6 +91,14 @@ test("date helpers", () => {
   assert.equal(formatIsoDate("2025", "fr"), "2025");
   assert.equal(formatIsoDate("[[date]]", "fr"), "[[date]]");
   assert.equal(isIsoDate("2025-13"), false);
-  assert.equal(isIsoDate("2025-02-30"), true);
+  assert.equal(isIsoDate("2025-02-30"), false, "no 30 February");
+  assert.equal(isIsoDate("2025-02-29"), false, "2025 is not a leap year");
+  assert.equal(isIsoDate("2024-02-29"), true, "2024 is");
+  assert.equal(isIsoDate("1900-02-29"), false, "centuries are not leap unless divisible by 400");
+  assert.equal(isIsoDate("2000-02-29"), true);
+  assert.equal(isIsoDate("2025-04-31"), false);
+  assert.equal(isIsoDate("2025-04-30"), true);
+  assert.equal(isIsoDate("2025-00"), false);
+  assert.equal(isIsoDate("2025-12-00"), false);
   assert.equal(isIsoDate("sept 2025"), false);
 });

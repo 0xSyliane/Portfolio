@@ -1,0 +1,22 @@
+---
+/** Status stamp (cachet). Wording comes from the case data (`stampLabel`). */
+import type { CaseStatus } from "../../content/types.ts";
+import { labelsFor } from "./labels.ts";
+
+interface Props {
+  label: string;
+  status?: CaseStatus;
+  tilt?: "a" | "b" | "c";
+  class?: string;
+}
+
+const { label, status = "verified-live", tilt = "a", class: className } = Astro.props;
+const tone = {
+  delivered: "ok",
+  "verified-live": "ok",
+  wip: "wait",
+  exploration: "concept",
+}[status];
+---
+
+<span class:list={["stamp", `stamp--${tone}`, tilt !== "a" && `stamp--tilt-${tilt}`, className]}><span class="sr-only">{labelsFor(Astro.url.pathname).status}</span>{label}</span>

@@ -1,13 +1,18 @@
 ---
 /**
- * STUB — owned by Dev B (content + CV). Replace the markup, keep the contract:
- * the page wrappers pass `facts` (language-independent) + `copy` (this locale).
- * DOM order = reading order: profile, projects, education, skills, languages, links.
+ * CV page (web + print source of the PDF). The page wrappers pass `facts`
+ * (language-independent) + `copy` (this locale); `buildCvView` joins them by id.
+ * DOM order = reading order: header, profile, experience and projects, then the side
+ * column (education, skills, languages, links). Real text everywhere, no images.
  */
-import EmailLink from "../../components/EmailLink.astro";
-import { formatIsoDate, type Locale } from "../../lib/i18n.ts";
+import "./cv.css";
+import { CHROME } from "../../content/site.ts";
+import { switchTarget, type Locale } from "../../lib/i18n.ts";
 import { rich } from "../../lib/rich.ts";
 import type { CvCopy, CvFacts } from "../../content/types.ts";
+import CvEntry from "./CvEntry.astro";
+import CvSide from "./CvSide.astro";
+import { buildCvView } from "./model.ts";
 
 interface Props {
   locale: Locale;
@@ -16,41 +21,48 @@ interface Props {
 }
 
 const { locale, facts, copy } = Astro.props;
+const view = buildCvView(facts, copy, locale);
+const other = switchTarget("cv", locale);
+const { switchLabel, todoLabel } = CHROME[locale];
 ---
 
-<div class="wrap page-main">
-  <h1>{facts.profile.name}</h1>
-  <p set:html={rich(copy.headline)} />
-
-  <section aria-labelledby="cv-profile">
-    <h2 id="cv-profile">{copy.headings.profile}</h2>
-    <p set:html={rich(copy.summary)} />
-    <p><a href={copy.downloadPdf.href}>{copy.downloadPdf.label}</a></p>
-  </section>
-
-  <section aria-labelledby="cv-projects">
-    <h2 id="cv-projects">{copy.headings.projects}</h2>
-    <ul role="list">
+<article class="wrap page-main cv">
+  <header class="cv-head">
+    <p class="cv-kicker mono">CV · {view.place}</p>
+    <h1 class="cv-name">{view.name}</h1>
+    <p class="cv-headline" set:html={rich(view.headline, todoLabel)} />
+    <p class="cv-tools no-print">
+      <a class="cv-button" href={copy.downloadPdf.href} download>
+        <span class="cv-button__ref mono" aria-hidden="true">PDF</span>
+        <span>{copy.downloadPdf.label}</span>
+      </a>
       {
-        facts.entries.map((entry) => {
-          const text = copy.entries.find((e) => e.id === entry.id);
-          return (
-            <li>
-              <h3 set:html={rich(`${text?.role ?? ""} — ${entry.org}`)} />
-              <p class="mono">
-                {formatIsoDate(entry.start, locale)} – {entry.end ? formatIsoDate(entry.end, locale) : copy.present}
-              </p>
-            </li>
-          );
-        })
+        other && (
+          <a class="cv-switch mono" href={other.path} hreflang={other.locale} lang={other.locale}>
+            {switchLabel}
+          </a>
+        )
       }
-    </ul>
-  </section>
-
-  <section aria-labelledby="cv-contact">
-    <h2 id="cv-contact">{copy.headings.links}</h2>
-    <p>
-      <EmailLink email={facts.email} label="E-mail" noScript="E-mail (JavaScript)" />
     </p>
-  </section>
-</div>
+  </header>
+
+  <div class="cv-body">
+    <div class="cv-main">
+      <section class="cv-section" aria-labelledby="cv-profile">
+        <h2 class="cv-h2" id="cv-profile">{copy.headings.profile}</h2>
+        <p class="cv-summary" set:html={rich(view.summary, todoLabel)} />
+      </section>
+
+      <section class="cv-section" aria-labelledby="cv-projects">
+        <h2 class="cv-h2" id="cv-projects">{copy.headings.projects}</h2>
+        <ol class="cv-entries" role="list">
+          {view.entries.map((entry) => <CvEntry entry={entry} todoLabel={todoLabel} />)}
+        </ol>
+      </section>
+
+
+    </div>
+
+    <CvSide locale={locale} view={view} copy={copy} email={facts.email} todoLabel={todoLabel} />
+  </div>
+</article>

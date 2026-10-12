@@ -1,6 +1,8 @@
 /* Header, footer and page frame. OWNER: platform. */
 .site-header {
-  position: sticky;
+  /* Phones: a two-row header (brand, then links + language) would eat ~90 px of every screen,
+     so it scrolls away; it sticks from 48rem up, where it is a single bar. */
+  position: static;
   inset-block-start: 0;
   z-index: var(--z-header);
   background: var(--paper);
@@ -11,24 +13,19 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-2) var(--space-5);
-  padding-block: var(--space-3);
+  column-gap: var(--space-5);
+  padding-block: var(--space-1) 0;
 }
 
 .site-header__brand {
+  /* Phone: row 1 is the brand alone, row 2 is the five links + the language switch. */
+  flex: 1 0 100%;
   font-weight: 800;
   font-size: 1.125rem;
   letter-spacing: -0.02em;
   color: var(--ink);
   text-decoration: none;
-  margin-inline-end: auto;
-}
-
-.site-header__nav ul {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-1) var(--space-5);
-  padding: 0;
+  padding-block: var(--space-3);
 }
 
 .site-header__nav a,
@@ -48,10 +45,122 @@
   text-decoration: underline;
 }
 
+/* Current page (the CV pages): underlined in the stamp colour. */
+.site-header__nav a[aria-current="page"] {
+  text-decoration: underline;
+  text-decoration-color: var(--stamp);
+  text-decoration-thickness: 0.14em;
+  text-underline-offset: 0.3em;
+}
+
+/* DOM order = visual order: brand, then links, then the language switch. */
+.site-header__bar {
+  display: flex;
+  flex: 1 0 100%;
+  align-items: center;
+  gap: var(--space-2);
+  border-block-start: 1px solid var(--hair);
+}
+
+.site-header__nav {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.site-header__nav ul {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  gap: 0 var(--space-2);
+  margin: 0;
+  padding: 0;
+}
+
+.site-header__nav a {
+  font-size: 0.9375rem;
+  padding-block: var(--space-3);
+  padding-inline: var(--space-1);
+  min-block-size: 44px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 22.5rem) {
+  .site-header__nav a {
+    font-size: 0.875rem;
+    padding-inline: 0;
+    min-inline-size: 24px;
+    text-align: center;
+  }
+
+  .site-header__nav ul {
+    column-gap: var(--space-1);
+  }
+}
+
 .site-header__switch {
+  flex: none;
   border: var(--border);
   padding-inline: var(--space-3);
   border-radius: var(--radius);
+  min-block-size: 44px;
+  min-inline-size: 44px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: 0;
+}
+
+.site-header__switch-long {
+  display: none;
+}
+
+@media (min-width: 48rem) {
+  .site-header {
+    position: sticky;
+  }
+
+  .site-header__inner {
+    flex-wrap: nowrap;
+    padding-block: 0;
+  }
+
+  .site-header__brand {
+    flex: 0 0 auto;
+    margin-inline-end: auto;
+  }
+
+  .site-header__bar {
+    flex: 0 1 auto;
+    gap: var(--space-5);
+    border-block-start: 0;
+  }
+
+  /* Wraps instead of overflowing when the user enlarges text spacing. */
+  .site-header__nav ul {
+    flex-wrap: wrap;
+    gap: 0 var(--space-5);
+  }
+
+  .site-header__nav a {
+    font-size: 1rem;
+    padding-inline: 0;
+    min-block-size: 24px;
+  }
+
+  .site-header__switch {
+    min-block-size: 24px;
+    min-inline-size: 0;
+    padding-block: var(--space-2);
+  }
+
+  .site-header__switch-short {
+    display: none;
+  }
+
+  .site-header__switch-long {
+    display: inline;
+  }
 }
 
 .site-footer {

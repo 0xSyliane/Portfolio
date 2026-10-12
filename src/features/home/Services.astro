@@ -1,0 +1,39 @@
+---
+import type { Home } from "../../content/types.ts";
+import { rich } from "../../lib/rich.ts";
+import Arrow from "./Arrow.astro";
+import SectionHead from "./SectionHead.astro";
+import { solid } from "./typo.ts";
+import "./services.css";
+
+interface Props {
+  services: Home["services"];
+}
+
+const { services } = Astro.props;
+---
+
+<section id="offres" class="home-section services" aria-labelledby="services-title">
+  <div class="wrap grid12">
+    <SectionHead no="03" id="services-title" heading={services.heading} intro={services.intro || undefined} />
+
+    <ol role="list" class="offers">
+      {
+        services.items.map((item) => (
+          <li class="offers__row" data-reveal>
+            <p class="offers__ref mono">{item.ref}</p>
+            <h3 set:html={solid(rich(item.title))} />
+            <p class="offers__summary" set:html={rich(item.summary)} />
+          </li>
+        ))
+      }
+    </ol>
+
+    <p class="offers__cta">
+      <a class="btn" href="#contact">
+        {services.cta}
+        <Arrow dir="down" class="btn__icon" />
+      </a>
+    </p>
+  </div>
+</section>

@@ -1,15 +1,17 @@
-import { execFileSync } from "node:child_process";
-import { existsSync } from "node:fs";
+// @ts-check
+import { existsSync, readdirSync } from "node:fs";
+import { join } from "node:path";
 
 /**
- * Lists regular files under `dir` with `find` (never `git ls-files`: build
- * output and untracked work must be checked too). Returns absolute paths.
+ * Lists regular files under `dir` (never `git ls-files`: build output and untracked work must be
+ * checked too). Symlinks are skipped. Returns sorted absolute paths; a missing directory is empty.
+ * @param {string} dir
+ * @returns {string[]}
  */
 export const listFiles = (dir) => {
   if (!existsSync(dir)) return [];
-  const out = execFileSync("find", [dir, "-type", "f", "-print0"], {
-    encoding: "utf8",
-    maxBuffer: 64 * 1024 * 1024,
-  });
-  return out.split("\0").filter(Boolean).sort();
+  return readdirSync(dir, { recursive: true, withFileTypes: true })
+    .filter((entry) => entry.isFile())
+    .map((entry) => join(entry.parentPath, entry.name))
+    .sort();
 };

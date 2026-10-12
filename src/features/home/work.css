@@ -1,0 +1,317 @@
+/* Travaux: one lead case, two offset cases, sheets that overlap. */
+.work__cases {
+  display: grid;
+  gap: var(--space-9);
+}
+
+.case {
+  display: grid;
+  gap: var(--space-7) var(--col-gap);
+  align-items: start;
+  scroll-margin-block-start: var(--space-8);
+}
+
+.case__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-5);
+  margin-block-end: var(--space-5);
+}
+
+.case__no {
+  color: var(--ink-2);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.case__title {
+  font-size: clamp(2rem, 1.2rem + 3.2vw, 4rem);
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+}
+
+.case--lead .case__title {
+  font-size: clamp(2.5rem, 1.4rem + 4.6vw, 5.5rem);
+}
+
+.case__summary {
+  max-width: 38ch;
+  margin-block-start: var(--space-5);
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+}
+
+.case__status {
+  max-width: 38ch;
+  margin-block-start: var(--space-2);
+  color: var(--ink-2);
+}
+
+.case__facts {
+  display: grid;
+  gap: 0;
+  max-width: 38rem;
+  margin-block-start: var(--space-6);
+  border-block-start: var(--home-rule-heavy);
+}
+
+.case__facts > div {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  gap: var(--space-4);
+  padding-block: var(--space-3);
+  border-block-end: 1px solid var(--rule);
+}
+
+.case__facts dt {
+  padding-block-start: 0.2em;
+  color: var(--ink-2);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.case__facts dd {
+  margin: 0;
+}
+
+.case__stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+}
+
+.case__stack li {
+  padding: 0.15em 0.55em;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+}
+
+.case__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+  margin-block-start: var(--space-5);
+}
+
+.case__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: 2.75rem;
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration-color: var(--stamp);
+  text-decoration-thickness: 0.14em;
+}
+
+.case__link:hover {
+  color: var(--link);
+}
+
+.case__link-icon,
+.work__cta-icon {
+  inline-size: 1.05em;
+  block-size: 1.05em;
+  flex: none;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.case__link:hover .case__link-icon,
+.work__cta:hover .work__cta-icon {
+  transform: translate(2px, -2px);
+}
+
+.work__cta:hover .work__cta-icon {
+  transform: translateX(3px);
+}
+
+/* ---- Visual column ---- */
+.case__visual {
+  position: relative;
+  min-inline-size: 0;
+}
+
+.case__visual--with-phone {
+  margin-block-end: var(--space-8);
+}
+
+.shot {
+  margin: 0;
+}
+
+.shot__img {
+  inline-size: 100%;
+  block-size: auto;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  box-shadow:
+    10px 10px 0 var(--sheet),
+    10px 10px 0 1px var(--rule);
+}
+
+.shot__caption {
+  margin-block-start: calc(var(--space-5) + 4px);
+  color: var(--ink-2);
+  letter-spacing: 0.04em;
+  overflow-wrap: anywhere;
+}
+
+.case__visual--with-phone .shot--desktop .shot__caption {
+  max-inline-size: 58%;
+}
+
+.shot--phone {
+  position: absolute;
+  inset-inline-end: var(--space-3);
+  inset-block-end: calc(var(--space-8) * -0.9);
+  inline-size: clamp(5.5rem, 26%, 11.5rem);
+  transform: rotate(2.5deg);
+}
+
+.shot--phone .shot__img {
+  border-width: 2px;
+  border-radius: 0.5rem;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+/* ---- Composition (no screenshot): typographic bill of materials ---- */
+.bom {
+  position: relative;
+  margin: 0;
+  padding: var(--space-5) var(--space-5) var(--space-3);
+  border: 1px solid var(--ink);
+  background: var(--sheet);
+  box-shadow:
+    10px 10px 0 var(--paper),
+    10px 10px 0 1px var(--rule);
+}
+
+.bom__head {
+  padding-block-end: var(--space-3);
+  border-block-end: var(--home-rule-heavy);
+  color: var(--ink-2);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.bom__list {
+  margin: 0;
+  padding: 0;
+}
+
+.bom__row {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--space-3);
+  padding-block: var(--space-3);
+  border-block-end: 1px solid var(--rule);
+}
+
+.bom__row:last-child {
+  border-block-end: 0;
+}
+
+.bom__no {
+  color: var(--stamp);
+  font-weight: 500;
+}
+
+.bom__item {
+  font-size: clamp(1.5rem, 1rem + 2vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+}
+
+/* ---- Foot ---- */
+.work__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-7);
+  margin-block-start: var(--space-8);
+  padding-block-start: var(--space-4);
+  border-block-start: 1px solid var(--rule);
+}
+
+.work__note {
+  max-width: 48ch;
+  color: var(--ink-2);
+}
+
+/* `.link-quiet` (home.css) sets inline-block: win by specificity so the arrow stays attached. */
+.work__cta.link-quiet {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: clamp(1.125rem, 0.9rem + 1vw, 1.75rem);
+  letter-spacing: -0.02em;
+}
+
+@media (min-width: 48rem) {
+  .work__cta.link-quiet {
+    white-space: nowrap;
+  }
+}
+
+/* ---- Desktop composition ---- */
+@media (min-width: 64rem) {
+  .case {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .case__text,
+  .case__visual {
+    grid-row: 1;
+  }
+
+  /* Lead: text left, large sheet right, sheet bleeds to the page edge. */
+  .case--lead .case__text {
+    grid-column: 1 / 6;
+  }
+
+  .case--lead .case__visual {
+    grid-column: 6 / 13;
+  }
+
+  /* Offset case: sheet left, text pushed right and down. */
+  .case--flip .case__visual {
+    grid-column: 1 / 8;
+  }
+
+  .case--flip .case__text {
+    grid-column: 9 / 13;
+    padding-block-start: var(--space-8);
+  }
+
+  /* Third case: text indented, visual to the right, dropped slightly. */
+  .case--plain .case__text {
+    grid-column: 2 / 7;
+  }
+
+  .case--plain .case__visual {
+    grid-column: 8 / 13;
+    margin-block-start: var(--space-8);
+  }
+
+  .shot--phone {
+    inset-inline-end: calc(var(--space-6) * -1);
+    inline-size: 24%;
+  }
+
+  /* Phone overlaps the text side on the flipped case: keep it inside the sheet. */
+  .case--flip .shot--phone {
+    inset-inline-end: calc(var(--space-7) * -1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case__link-icon,
+  .work__cta-icon {
+    transition: none;
+  }
+}

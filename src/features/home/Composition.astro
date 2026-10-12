@@ -1,0 +1,28 @@
+---
+/**
+ * Typographic "bill of materials" for an engineering case that must not show
+ * any screenshot: the stack as numbered ledger lines. Wording comes from data.
+ */
+import { labelsFor } from "./labels.ts";
+
+interface Props {
+  title: string;
+  items: readonly string[];
+}
+
+const { title, items } = Astro.props;
+---
+
+<figure class="bom">
+  <figcaption class="bom__head mono">{labelsFor(Astro.url.pathname).work.bom} · {title}</figcaption>
+  <ol role="list" class="bom__list">
+    {
+      items.map((item, i) => (
+        <li class="bom__row">
+          <span class="bom__no mono">{String(i + 1).padStart(2, "0")}</span>
+          <span class="bom__item">{item}</span>
+        </li>
+      ))
+    }
+  </ol>
+</figure>

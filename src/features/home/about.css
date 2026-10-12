@@ -1,0 +1,43 @@
+/* À propos: pull line left, 60ch text right. */
+.about__pull {
+  grid-column: 1 / -1;
+  margin: 0 0 var(--space-7);
+  padding-inline-start: var(--space-4);
+  border-inline-start: 6px solid var(--stamp);
+  max-width: 22ch;
+  font-size: clamp(1.75rem, 1.1rem + 2.6vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+.about__body {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: var(--space-5);
+  align-content: start;
+}
+
+.about__body p {
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+}
+
+.about__photo {
+  inline-size: min(100%, 20rem);
+  block-size: auto;
+  border: 1px solid var(--ink);
+  box-shadow: 8px 8px 0 var(--sheet);
+}
+
+@media (min-width: 64rem) {
+  .about__pull {
+    grid-column: 1 / 8;
+    margin-block-end: 0;
+  }
+
+  .about__body {
+    grid-column: 8 / 13;
+    padding-block-start: var(--space-3);
+  }
+}

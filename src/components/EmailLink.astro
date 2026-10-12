@@ -1,33 +1,54 @@
 ---
 /**
- * Obfuscated e-mail link. The address is NOT in the HTML: the parts live in
- * data attributes and src/scripts/contact.ts assembles the mailto on load.
- * Without JS it renders as inert text (`noScript`).
+ * Obfuscated e-mail. The address is NOT in the HTML as a whole:
+ *  - live parts: a plain `<span>` note (no-JS state, never an inert link) carries the local part,
+ *    a separate hidden node carries the domain, encoded. src/scripts/contact.ts swaps the span for a
+ *    real link and assembles the `mailto:` only on pointer / focus / click intent.
+ *  - placeholder parts (`[[…]]`): only the visible marker is rendered (check:publish blocks it).
+ * The print/PDF address is injected by scripts/cv-pdf.mjs from the CV facts, never from the HTML.
  */
 import type { EmailParts } from "../content/types.ts";
+import { buildMailto, encodeMailPart } from "../lib/contact.ts";
+import { isPlaceholder } from "../lib/placeholder.ts";
+import { rich } from "../lib/rich.ts";
 
 interface Props {
   email: Pick<EmailParts, "local" | "domain"> & { subject?: string };
   /** Visible label once the link is live, e.g. "Écrire un e-mail". */
   label: string;
-  /** Text shown until/unless JS runs. */
+  /** Text shown while JS has not run (or is off). */
   noScript: string;
+  /** Screen-reader suffix of the placeholder marker. */
+  todoLabel?: string;
   class?: string;
 }
 
-const { email, label, noScript, class: className } = Astro.props;
+const { email, label, noScript, todoLabel, class: className } = Astro.props;
+const live = buildMailto(email) !== undefined;
+const pending = isPlaceholder(email.local) || isPlaceholder(email.domain);
+if (!live && !pending) {
+  throw new Error("EmailLink: the e-mail parts are neither valid nor placeholders");
+}
 ---
 
-<a
-  class:list={["email-link", className]}
-  href="#contact"
-  aria-disabled="true"
-  data-mail
-  data-mail-user={email.local}
-  data-mail-domain={email.domain}
-  data-mail-subject={email.subject}
-  data-mail-label={label}>{noScript}</a
->
+{
+  live ? (
+    <span class="email-slot" data-mail-slot>
+      <span
+        class:list={["email-link", className]}
+        data-mail
+        data-mail-user={email.local}
+        data-mail-subject={email.subject}
+        data-mail-label={label}
+      >
+        {noScript}
+      </span>
+      <span hidden data-mail-host={encodeMailPart(email.domain)} />
+    </span>
+  ) : (
+    <span class:list={["email-link", "email-link--pending", className]} set:html={rich(`${email.local}@${email.domain}`, todoLabel)} />
+  )
+}
 <script>
   import "../scripts/contact.ts";
 </script>
