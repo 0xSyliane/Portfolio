@@ -22,8 +22,8 @@ test("every page lists hreflang alternates (self + other + x-default), both loca
   assert.equal(withLinks.length, 6);
   const sets = withLinks.map((b) => [...b.matchAll(/hreflang="([^"]+)" href="([^"]+)"/g)].map((m) => `${m[1]}=${m[2]}`));
   assert.deepEqual(sets[0], sets[1]);
-  assert.deepEqual(sets[0], [`fr=${ORIGIN}/fr/`, `en=${ORIGIN}/en/`, `x-default=${ORIGIN}/fr/`]);
-  assert.deepEqual(sets[2], [`fr=${ORIGIN}/fr/cv/`, `en=${ORIGIN}/en/cv/`, `x-default=${ORIGIN}/fr/cv/`]);
+  assert.deepEqual(sets[0], [`fr=${ORIGIN}/fr/`, `en=${ORIGIN}/en/`, `x-default=${ORIGIN}/en/`]);
+  assert.deepEqual(sets[2], [`fr=${ORIGIN}/fr/cv/`, `en=${ORIGIN}/en/cv/`, `x-default=${ORIGIN}/en/cv/`]);
 });
 
 test("<lastmod> is written from the given date and omitted when unknown", () => {

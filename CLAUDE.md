@@ -70,3 +70,5 @@ Headers in `vercel.json`: strict CSP (`script-src 'self'`, `style-src 'self'`, n
 - Experience: internship at Alcodefi (web dev + data management: paper/digital files, error checks, Excel import, folders). Skills: Power Automate, n8n, Python, Ollama, llama.cpp, Hermes, OpenClaw, Bash, Claude Code, Excel.
 - Skills sit in the CV SIDE column (so the A4 PDF fits one page); an empty date column collapses (`:has(> .cv-entry__period:empty)`).
 - The CV links to the portfolio (https://syliane.vercel.app/). Unknown project dates / USTHB entry year / CEFR levels are omitted, not placeholders.
+
+- English is the DEFAULT language (decision 2026-10-12): `DEFAULT_LOCALE = "en"` in `site.ts`, `/` redirects to `/en/` (vercel.json), hreflang x-default = EN, the 404 is English. French stays at `/fr/`.

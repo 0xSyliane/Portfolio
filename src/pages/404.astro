@@ -3,14 +3,17 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout
-  locale="fr"
-  title="Page introuvable"
-  description="Cette page n'existe pas ou a été déplacée."
+  locale="en"
+  title="Page not found"
+  description="This page does not exist or has moved."
   noindex
 >
   <div class="wrap page-main">
-    <h1>Page introuvable</h1>
-    <p>Cette page n'existe pas ou a été déplacée.</p>
-    <p><a href="/fr/">Retour à l'accueil</a> · <a href="/fr/cv/">Voir le CV</a></p>
+    <h1>Page not found</h1>
+    <p>This page does not exist or has moved.</p>
+    <p>
+      <a href="/en/">Back to the home page</a> · <a href="/en/cv/">View the CV</a> ·
+      <a href="/fr/" hreflang="fr" lang="fr">Accueil en français</a>
+    </p>
   </div>
 </BaseLayout>

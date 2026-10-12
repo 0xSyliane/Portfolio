@@ -39,7 +39,7 @@ test("hreflang set lists every real locale path once, plus an x-default pointing
     set.filter((a) => a.hreflang !== "x-default").map((a) => [a.hreflang, a.path]),
     localesOf("cv").map((locale) => [locale, PAGES.cv[locale]]),
   );
-  assert.equal(set.find((a) => a.hreflang === "x-default")?.path, pathFor("cv", "fr"));
+  assert.equal(set.find((a) => a.hreflang === "x-default")?.path, pathFor("cv", "en"), "x-default is the English page");
 });
 
 test("the language switch is reciprocal: following it twice comes back to the start", () => {

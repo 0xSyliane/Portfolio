@@ -14,8 +14,8 @@ const global = config.headers.find((r) => r.source === "/(.*)");
 const value = (key: string): string | undefined =>
   global?.headers.find((h) => h.key.toLowerCase() === key.toLowerCase())?.value;
 
-test("root redirects to /fr/ with a 308, no locale sniffing", () => {
-  assert.deepEqual(config.redirects, [{ source: "/", destination: "/fr/", statusCode: 308 }]);
+test("root redirects to /en/ (English is the default) with a 308, no locale sniffing", () => {
+  assert.deepEqual(config.redirects, [{ source: "/", destination: "/en/", statusCode: 308 }]);
   assert.equal(config.trailingSlash, true);
 });
 

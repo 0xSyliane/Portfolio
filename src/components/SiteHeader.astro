@@ -10,7 +10,7 @@ interface Props {
 const { locale, page } = Astro.props;
 const chrome = CHROME[locale];
 const target = page ? switchTarget(page, locale) : undefined;
-const homeHref = "/fr/";
+const homeHref = `/${locale}/`;
 const current = Astro.url.pathname;
 ---
 

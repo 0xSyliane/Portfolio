@@ -47,7 +47,7 @@ export const serializeLd = (nodes: readonly JsonLd[]): string[] =>
     .filter((n): n is JsonLd => n !== undefined)
     .map((n) => JSON.stringify({ "@context": "https://schema.org", ...n }).replace(/</g, "\\u003c"));
 
-export const personId = (): string => `${absoluteUrl("/fr/")}#person`;
+export const personId = (): string => `${absoluteUrl("/en/")}#person`;
 
 /**
  * `knowsAbout` topics, taken ONLY from skills already stated in the CV facts (never invented):
@@ -75,7 +75,7 @@ export const personLd = (input: {
   name: SITE_NAME,
   alternateName: SITE_NAME_VARIANTS,
   jobTitle: input.jobTitle,
-  url: absoluteUrl("/fr/"),
+  url: absoluteUrl("/en/"),
   image: input.image,
   knowsAbout: input.knowsAbout,
   address: input.city
@@ -86,9 +86,9 @@ export const personLd = (input: {
 
 export const webSiteLd = (inLanguage: string): JsonLd => ({
   "@type": "WebSite",
-  "@id": `${absoluteUrl("/fr/")}#website`,
+  "@id": `${absoluteUrl("/en/")}#website`,
   name: SITE_NAME,
-  url: absoluteUrl("/fr/"),
+  url: absoluteUrl("/en/"),
   inLanguage,
   publisher: { "@id": personId() },
 });

@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "astro",
   "trailingSlash": true,
-  "redirects": [{ "source": "/", "destination": "/fr/", "statusCode": 308 }],
+  "redirects": [{ "source": "/", "destination": "/en/", "statusCode": 308 }],
   "headers": [
     {
       "source": "/(.*)",

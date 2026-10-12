@@ -15,8 +15,8 @@ export const SITE_NAME = "Syliane Saadbouzid";
  */
 export const SITE_NAME_VARIANTS = ["Syliane Sofiane Saad Bouzid", "Syliane Saad Bouzid"] as const;
 
-/** Default locale (served at /fr/). `/` redirects here (see vercel.json). */
-export const DEFAULT_LOCALE: Locale = "fr";
+/** Default locale (served at /en/, decision 2026-10-12). `/` redirects here (see vercel.json); x-default points here. */
+export const DEFAULT_LOCALE: Locale = "en";
 
 /** `<meta name="theme-color">` — must equal `--paper` (light). */
 export const THEME_COLOR = "#f7f6f1";
