@@ -9,6 +9,7 @@ import type { CvFacts } from "../../src/content/types.ts";
 test("formatPeriod: ongoing entry ends with the localized 'present'", () => {
   assert.equal(formatPeriod("2025-09", undefined, "fr", "Présent"), "sept. 2025 – Présent");
   assert.equal(formatPeriod("2024", "2025-03", "en", "Present"), "2024 – Mar 2025");
+  assert.equal(formatPeriod("2022", "2022", "fr", "Présent"), "2022", "one year prints once");
 });
 
 test("formatPeriod: an unknown start prints nothing (never 'Present')", () => {

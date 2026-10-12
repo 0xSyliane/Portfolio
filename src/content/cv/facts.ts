@@ -13,10 +13,10 @@ export const cvFacts: CvFacts = {
   profile: { name: "Syliane Saadbouzid", city: "Alger", country: "Algérie" },
   entries: [
     {
-      id: "alcodefi",
+      id: "alcodefi-web",
       kind: "work",
       org: "Alcodefi",
-      stack: ["Next.js", "Excel"],
+      stack: ["Next.js"],
       url: "https://www.alcodefi.org/",
     },
     {
@@ -35,6 +35,8 @@ export const cvFacts: CvFacts = {
       id: "shellmates",
       kind: "community",
       org: "Shellmates, USTHB",
+      start: "2024",
+      end: "2025",
       stack: ["Next.js", "TypeScript", "Tailwind CSS"],
       url: "https://www.shellmates.club/",
     },
@@ -45,10 +47,18 @@ export const cvFacts: CvFacts = {
       stack: ["JavaScript", "CSS", "Vercel"],
       url: "https://blaze-type.vercel.app/",
     },
+    {
+      id: "alcodefi-data",
+      kind: "work",
+      org: "Alcodefi",
+      start: "2022",
+      end: "2022",
+      stack: ["Excel"],
+    },
   ],
   education: [
-    { id: "usthb", institution: "USTHB" },
-    { id: "excel", institution: "Microsoft Excel" },
+    { id: "usthb", institution: "USTHB", start: "2024" },
+    { id: "excel", institution: "Alcodefi", start: "2022", end: "2022" },
   ],
   skills: [
     { id: "web", items: ["TypeScript", "React", "Next.js", "Astro", "Tailwind CSS", "Node.js"] },

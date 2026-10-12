@@ -272,12 +272,25 @@
   }
 
   .cv .cv-side .cv-section + .cv-section {
-    margin-block-start: 12pt;
+    margin-block-start: 9pt;
   }
 
   .cv .cv-langs,
   .cv .cv-links {
     gap: 7pt;
+  }
+
+  /* Language and level on one line. */
+  .cv .cv-langs {
+    gap: 4pt;
+  }
+
+  .cv .cv-langs li {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0 4pt;
   }
 
   .cv .cv-langs__cefr {

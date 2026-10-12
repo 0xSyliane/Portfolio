@@ -68,6 +68,7 @@ export const formatPeriod = (start: string | undefined, end: string | undefined,
   if (start === undefined) return "";
   const from = formatIsoDate(start, locale);
   if (isPlaceholder(start)) return from;
+  if (end === start) return from;
   return `${from} – ${end === undefined ? present : formatIsoDate(end, locale)}`;
 };
 

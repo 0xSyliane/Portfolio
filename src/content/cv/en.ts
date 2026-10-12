@@ -22,17 +22,14 @@ export const cvEn: CvCopy = {
   place: "Algiers",
   headline: "Full-stack web developer, automation and AI",
   summary:
-    "Full-stack web developer based in Algiers, working remotely. I build websites, web apps and online shops (TypeScript, Next.js, Python, PostgreSQL) and automate repetitive work with n8n, Power Automate, Python and local AI models (Ollama, llama.cpp). Self-employed; third-year student at USTHB, interning at Alcodefi. Open to remote freelance projects.",
+    "Full-stack web developer based in Algiers, working remotely. I build websites, web apps and online shops (TypeScript, Next.js, Python, PostgreSQL) and automate repetitive work with n8n, Power Automate, Python and local AI models (Ollama, llama.cpp). Self-employed; third-year computer science engineering student at USTHB (cybersecurity), with an internship at Alcodefi in web development and data management. Open to remote freelance projects.",
   downloadPdf: { label: "Download the CV (PDF)", href: "/cv/syliane-saadbouzid-cv-en.pdf" },
   entries: [
     {
-      id: "alcodefi",
-      role: "Intern: web development and data management",
+      id: "alcodefi-web",
+      role: "Web developer intern",
       location: "Alcodefi, vocational training institute, Algiers",
-      bullets: [
-        "Web development, including the alcodefi.org website (Next.js).",
-        "Data management: organising paper and digital files, checking errors when paper records are keyed into digital form, importing data into Excel.",
-      ],
+      bullets: ["Web development, including the alcodefi.org website (Next.js)."],
     },
     {
       id: "boutique",
@@ -52,7 +49,7 @@ export const cvEn: CvCopy = {
       id: "shellmates",
       role: "Shellmates club website",
       location: "USTHB cybersecurity club",
-      bullets: ["Team project, as a member of the club's development department (former member)."],
+      bullets: ["Team project, as a member of the club's development department."],
     },
     {
       id: "blaze-type",
@@ -60,16 +57,25 @@ export const cvEn: CvCopy = {
       location: "Solo project",
       bullets: ["Typing-speed web app with live speed (WPM) and accuracy."],
     },
+    {
+      id: "alcodefi-data",
+      role: "Data management intern",
+      location: "Alcodefi, vocational training institute, Algiers",
+      bullets: [
+        "Organised paper and digital files and folders.",
+        "Checked errors when paper records were keyed into digital form, and imported the data into Excel.",
+      ],
+    },
   ],
   education: [
     {
       id: "usthb",
-      degree: "Engineering studies, 3rd year",
+      degree: "Computer science engineering, cybersecurity (3rd year)",
       note: "Algiers",
     },
     {
       id: "excel",
-      degree: "Training course",
+      degree: "Excel training course",
       note: "",
     },
   ],
@@ -82,9 +88,9 @@ export const cvEn: CvCopy = {
     { id: "tools", label: "Tools (Docker used occasionally)" },
   ],
   languages: [
-    { code: "fr", name: "French" },
-    { code: "en", name: "English" },
-    { code: "ar", name: "Arabic" },
+    { code: "fr", name: "French", levelLabel: "Excellent" },
+    { code: "en", name: "English", levelLabel: "Very good" },
+    { code: "ar", name: "Arabic", levelLabel: "Good" },
   ],
   linkLabels: { github: "GitHub", linkedin: "LinkedIn", portfolio: "Portfolio" },
   present: "Present",

@@ -16,7 +16,7 @@ export const homeFr: Home = {
     eyebrow: "Alger · USTHB, 3e année · auto-entrepreneur",
     name: "Syliane Saadbouzid",
     role: "Développeur web full-stack et automatisation",
-    lede: "Étudiant en 3e année à l'USTHB et stagiaire chez Alcodefi, je construis des sites, des applications web et des automatisations. Voici ce que j'ai réalisé.",
+    lede: "Étudiant en 3e année d'ingénieur à l'USTHB, avec un stage chez Alcodefi, je construis des sites, des applications web et des automatisations. Voici ce que j'ai réalisé.",
     // The address is never in the HTML: the primary CTA jumps to the obfuscated e-mail link.
     ctaPrimary: { label: "Écrire un message", href: "#contact" },
     ctaSecondary: { label: "Télécharger le CV (PDF)", href: "/cv/syliane-saadbouzid-cv-fr.pdf" },
@@ -97,7 +97,7 @@ export const homeFr: Home = {
           "Page d'accueil du site du club Shellmates, version ordinateur : titre « This is Shellmates Club », présentation du club et bouton « Join Us! » sur fond sombre à motifs de circuits.",
         summary: "Site du club de cybersécurité de l'USTHB.",
         statusNote: "Réalisé en équipe, pas seul.",
-        role: "Ancien membre du département développement du club.",
+        role: "Ancien membre du département développement du club (2024-2025).",
         stack: ["Next.js", "TypeScript", "Tailwind CSS"],
         links: { live: "https://www.shellmates.club/" },
       },
@@ -123,7 +123,7 @@ export const homeFr: Home = {
     pull: "Je préfère montrer ce qui est livré\u00a0: les liens de la section Travaux mènent à des sites que vous pouvez ouvrir.",
     paragraphs: [
       "Je suis développeur web à Alger et auto-entrepreneur : je crée des sites, des applications web et des automatisations (e-mails, documents, API).",
-      "Étudiant en 3e année à l'USTHB, je suis en stage chez Alcodefi, en développement web et en gestion de données : gestion des fichiers papier et numériques, vérification des erreurs lors du passage du papier au numérique, import de données dans Excel, organisation des dossiers.",
+      "Étudiant en 3e année d'ingénieur en informatique à l'USTHB (spécialité cybersécurité), j'ai fait un stage chez Alcodefi, en développement web et en gestion de données : gestion des fichiers papier et numériques, vérification des erreurs lors du passage du papier au numérique, import de données dans Excel, organisation des dossiers.",
       "Je crée des automatisations avec Power Automate, n8n et Python, en y intégrant de l'IA (Ollama, llama.cpp). Je sais utiliser Hermes et OpenClaw, et je maîtrise Bash et Claude Code. Côté web, mes outils principaux sont TypeScript, Next.js, Python et PostgreSQL. J'ai fait partie du département développement du club Shellmates.",
       "Mon code est sur [GitHub](https://github.com/0xSyliane) et mon parcours sur [LinkedIn](https://www.linkedin.com/in/syliane-saadbouzid-a9278a395/).",
     ],

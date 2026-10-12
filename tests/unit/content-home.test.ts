@@ -116,7 +116,7 @@ test("live links have distinct, descriptive labels", () => {
 test("À propos states the status and links GitHub", () => {
   const [first, second, tools, links] = homeFr.about.paragraphs;
   assert.match(first ?? "", /auto-entrepreneur/);
-  assert.match(second ?? "", /3e année à l'USTHB.*Alcodefi/);
+  assert.match(second ?? "", /3e année.*USTHB.*Alcodefi/);
   for (const tool of ["Power Automate", "n8n", "Ollama", "llama.cpp", "Hermes", "OpenClaw", "Bash", "Claude Code"]) {
     assert.ok((tools ?? "").includes(tool), tool);
   }
