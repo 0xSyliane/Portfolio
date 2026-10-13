@@ -78,5 +78,5 @@ export const cvFacts: CvFacts = {
     { id: "github", url: "https://github.com/0xSyliane" },
     { id: "linkedin", url: "https://www.linkedin.com/in/syliane-saadbouzid-a9278a395/" },
   ],
-  email: { local: "sylianesaadbouzide", domain: "gmail.com" },
+  email: { local: "Saadbouzid.syliane", domain: "gmail.com" },
 };

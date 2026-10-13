@@ -137,7 +137,7 @@ export const homeEn: Home = {
       "A question, a proposal, an internship or a project? Write me a few lines: an e-mail is enough, there is no form.",
     emailLabel: "Write an e-mail",
     emailNoScript: "E-mail address: enable JavaScript to show it, or reach me on LinkedIn or GitHub.",
-    email: { local: "sylianesaadbouzide", domain: "gmail.com", subject: "Getting in touch" },
+    email: { local: "Saadbouzid.syliane", domain: "gmail.com", subject: "Getting in touch" },
     linkedin: {
       label: "Contact me on LinkedIn",
       href: "https://www.linkedin.com/in/syliane-saadbouzid-a9278a395/",

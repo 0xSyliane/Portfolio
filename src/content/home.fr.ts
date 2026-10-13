@@ -141,7 +141,7 @@ export const homeFr: Home = {
     emailLabel: "Écrire un e-mail",
     // Shown only while JS has not run.
     emailNoScript: "Adresse e-mail : activez JavaScript pour l'afficher, ou écrivez-moi sur LinkedIn ou GitHub.",
-    email: { local: "sylianesaadbouzide", domain: "gmail.com", subject: "Prise de contact" },
+    email: { local: "Saadbouzid.syliane", domain: "gmail.com", subject: "Prise de contact" },
     linkedin: {
       label: "Me contacter sur LinkedIn",
       href: "https://www.linkedin.com/in/syliane-saadbouzid-a9278a395/",
